@@ -1,0 +1,2531 @@
+% \iffalse meta-comment
+% !TEX program  = LuaLaTeX
+%
+% itecreport.dtx
+%
+% Copyright (C) 2013-2014 by Xu Cheng <xucheng@me.com>
+%               2014-2016 by hust-latex <https://github.com/hust-latex>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is hust-latex Organization.
+%
+% This work consists of the files itecreport.dtx and itecreport.ins
+% and the derived file itecreport-zh.cls, itecreport-en.cls and
+% along with its document and example files.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{itecreport.dtx}
+%</driver>
+%
+%<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<class-zh>\ProvidesClass{itecreport-zh}
+%<class-en>\ProvidesClass{itecreport-en}
+%<*class>
+[2016/06/01 v1.1 A Report Template for Internet Technology and Engineering R&D Center of HUST]
+%</class>
+%
+%<*driver>
+\documentclass[12pt,a4paper,numbered,full]{l3doc}
+
+\usepackage{fontspec}
+\setmainfont[Ligatures={Common,TeX}]{Tex Gyre Pagella}
+\setsansfont[Ligatures={Common,TeX}]{Droid Sans}
+\setmonofont{CMU Typewriter Text}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+
+\usepackage{luatexja-fontspec}
+\setmainjfont[BoldFont={AdobeHeitiStd-Regular},ItalicFont={AdobeKaitiStd-Regular}]{AdobeSongStd-Light}
+\setsansjfont{AdobeKaitiStd-Regular}
+\defaultjfontfeatures{JFM=kaiming}
+\newjfontfamily\KAI{AdobeKaitiStd-Regular}
+\newjfontfamily\FANGSONG{AdobeFangsongStd-Regular}
+
+\linespread{1.2}\selectfont
+
+\usepackage[top=1.2in,bottom=1.2in,left=1.5in,right=1in]{geometry}
+\pagewidth=\paperwidth
+\pageheight=\paperheight
+
+\usepackage{color}
+\usepackage[table]{xcolor}
+
+\definecolor{hyperreflinkred}{RGB}{128,23,31}
+\hypersetup{
+  unicode,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  bookmarksopenlevel=2,
+  breaklinks=true,
+  colorlinks=true,
+  allcolors=hyperreflinkred,
+  linktoc=page,
+  plainpages=false,
+  pdfpagelabels=true,
+  pdfstartview={XYZ null null 1}
+}
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+
+\usepackage{titlesec,titletoc}
+\usepackage[titles]{tocloft}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+\usepackage{enumitem}
+\setlist{noitemsep,partopsep=0pt,topsep=.8ex}
+\setlist[1]{labelindent=\parindent}
+\setlist[enumerate,1]{label=\arabic*.}
+\setlist[enumerate,2]{label*=\arabic*}
+\setlist[enumerate,3]{label=\emph{\alph*})}
+
+\usepackage{listings}
+\definecolor{lstgreen}{rgb}{0,0.6,0}
+\definecolor{lstgray}{rgb}{0.5,0.5,0.5}
+\definecolor{lstmauve}{rgb}{0.58,0,0.82}
+\lstset{
+  basicstyle=\footnotesize\ttfamily\FANGSONG,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{lstgreen}\itshape\KAI,
+  stringstyle=\color{lstmauve},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  numbers=left,
+  numberstyle=\tiny\color{lstgray},
+  frame=lines,
+  rulecolor=\color{black},
+  breaklines=true
+}
+
+\AtBeginEnvironment{verbatim}{\small}
+\let\AltMacroFont\MacroFont
+
+\usepackage{metalogo}
+\usepackage{notes}
+\usepackage{tabularx}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftsecindent}{2em}
+\setlength{\cftsubsecindent}{4em}
+\makeatletter
+\newskip\ITEC@oldcftbeforepartskip
+\ITEC@oldcftbeforepartskip=\cftbeforepartskip
+\newskip\ITEC@oldcftbeforesecskip
+\ITEC@oldcftbeforesecskip=\cftbeforesecskip
+\let\ITEC@oldl@part\l@part
+\let\ITEC@oldl@section\l@section
+\let\ITEC@oldl@subsection\l@subsection
+\def\l@part#1#2{\ITEC@oldl@part{#1}{#2}\cftbeforepartskip=3pt}
+\def\l@section#1#2{\ITEC@oldl@section{#1}{#2}\cftbeforepartskip=\ITEC@oldcftbeforepartskip\cftbeforesecskip=3pt}
+\def\l@subsection#1#2{\ITEC@oldl@subsection{#1}{#2}\cftbeforesecskip=\ITEC@oldcftbeforesecskip}
+\makeatother
+
+\titleformat{\part}
+  {
+    \bfseries
+    \centering
+    \fontsize{18pt}{21.6pt}\selectfont
+  }
+  {\thepart}
+  {1em}
+  {}
+\let\oldpart\part
+\def\part#1{\newpage\oldpart{#1}}
+
+\def\orvar{\textnormal{|}}
+
+\IndexPrologue
+ {
+  \part{Index}
+  The~italic~numbers~denote~the~pages~where~the~
+  corresponding~entry~is~described,~
+  numbers~underlined~point~to~the~definition,~
+  all~others~indicate~the~places~where~it~is~used.
+ }
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+
+\def\email#1{
+  \href{mailto:#1}{\texttt{#1}}
+}
+
+\begin{document}
+\DocInput{itecreport.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{1195}
+%
+% \iffalse
+%<*!(readme|example-bib|example-eps)>
+% \fi
+%% \CharacterTable
+%% {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%  Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%  Digits        \0\1\2\3\4\5\6\7\8\9
+%%  Exclamation   \!     Double quote  \"     Hash (number) \#
+%%  Dollar        \$     Percent       \%     Ampersand     \&
+%%  Acute accent  \'     Left paren    \(     Right paren   \)
+%%  Asterisk      \*     Plus          \+     Comma         \,
+%%  Minus         \-     Point         \.     Solidus       \/
+%%  Colon         \:     Semicolon     \;     Less than     \<
+%%  Equals        \=     Greater than  \>     Question mark \?
+%%  Commercial at \@     Left bracket  \[     Backslash     \\
+%%  Right bracket \]     Circumflex    \^     Underscore    \_
+%%  Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%  Right brace   \}     Tilde         \~}
+% \iffalse
+%</!(readme|example-bib|example-eps)>
+% \fi
+%
+% \changes{v1.0}{2013/06/01}{Initial version}
+% \changes{v1.1}{2016/06/01}{Fix for TeXLive 2016. Remove \texttt{interfaces} and other problematic package}
+% \changes{v1.2}{2016/07/05}{Fix for \XeLaTeX}
+%
+% \GetFileInfo{itecreport.dtx}
+%
+% \DoNotIndex{\#,\$,\%,\&,\@,\\,\{,\},\^,\_,\~,\ ,\,}
+% \DoNotIndex{\def,\if,\else,\fi,\gdef,\long,\let}
+% \DoNotIndex{\@ne,\@nil}
+% \DoNotIndex{\begingroup,\endgroup,\advance}
+% \DoNotIndex{\newcommand,\renewcommand}
+% \DoNotIndex{\newenvironment,\renewenvironment}
+% \DoNotIndex{\RequirePackage}
+%
+% \title{A Report Template for Internet Technology and Engineering R\&D Center of HUST: the \textsf{itecreport-zh} and \textsf{itecreport-en} class
+% \thanks{This document corresponds to \textsf{itecreport-zh.cls} and \textsf{itecreport-en.cls} ~\fileversion, dated \filedate.}}
+% \author{Xu Cheng \\ \email{xucheng@me.com}}
+% \date{\today}
+%
+% \begingroup
+% \hypersetup{allcolors=black}
+% \maketitle
+% \endgroup
+% \tableofcontents
+%
+% \part{Introduction}
+%
+% This is a report template for \href{http://itec.hust.edu.cn/}{Internet Technology and Engineering R\&D Center of HUST}. This template is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%
+% The whole project is published under LPPL v1.3 License at \href{https://github.com/hust-latex/itecreport}{GitHub}.
+%
+% This template provides two class files which correspond to Chinese version and English version template separately: \textsf{itecreport-zh} and \textsf{itecreport-en}.
+%
+% Read \autoref{part:中文模板使用方法} and \autoref{part:Usage of English Version Template} for usage of Chinese version and English version template separately. The \autoref{part:Implementation} is the implementation of this template.
+%
+% \part{中文模板使用方法}\label{part:中文模板使用方法}
+%
+% \section{使用必要条件}
+%
+% \begin{enumerate}
+%     \item 安装最新版本的\href{http://www.tug.org/texlive/}{\texttt{Texlive}}（推荐）或\href{http://miktex.org/}{\texttt{MiKTex}}。因为未及时更新的宏包可能存在未修复的bug，请确保所有宏包都更新至最新。
+%     \item 安装如下中文字体\footnote{本模板所用到的英文字体\textsf{Tex Gyre Termes}，\textsf{Droid Sans}和\textsf{CMU Typewriter Text}均默认安装于\textsf{Texlive}和\textsf{MiKTex}中。}：
+%     \begin{enumerate}[label=\emph{\alph*})]
+%         \item \textsf{AdobeSongStd-Light}
+%         \item \textsf{AdobeKaitiStd-Regular}
+%         \item \textsf{AdobeHeitiStd-Regular}
+%         \item \textsf{AdobeFangsongStd-Regular}
+%     \end{enumerate}
+%     \begin{informationnote}
+%     如果使用\textnormal{\LuaTeX}，安装字体之后需运行命令\verb+mkluatexfontdb+生成字体索引。
+%     \end{informationnote}
+% \end{enumerate}
+%
+% \section{安装}
+%
+% \subsection{安装到本地}
+%
+% 使用如下命令即可安装本模板到本地：
+% \begin{verbatim}
+%     make install
+% \end{verbatim}
+% 如需卸载，则使用如下命令：
+% \begin{verbatim}
+%     make uninstall
+% \end{verbatim}
+%
+% 对于没有安装\verb+Make+的Windows系统用户，可以使用如下命令安装：
+% \begin{verbatim}
+%     makewin32.bat install
+% \end{verbatim}
+% 如需卸载，则使用如下命令：
+% \begin{verbatim}
+%     makewin32.bat uninstall
+% \end{verbatim}
+% 虽然\verb+makewin32.bat+表现与\verb+Makefile+极其相似，但是还是强烈建议你安装\verb+Make+，对于Windows用户可以在\href{http://gnuwin32.sourceforge.net/packages/make.htm}{这里}下载。
+%
+% \subsection{免安装使用}
+%
+% 如果你希望临时使用本模板，而非安装到本地供长期使用。使用如下命令解压模板文件：
+% \begin{verbatim}
+%     make unpack
+% \end{verbatim}
+% 对于没有安装\verb+Make+的Windows系统用户，则使用如下命令解压：
+% \begin{verbatim}
+%     makewin32.bat unpack
+% \end{verbatim}
+%
+% 再将\verb+itecreport+目录下的\verb+itecreport-zh.cls+文件拷贝到你\TeX{}工程根目录下即可。
+%
+% \section{基本用法}
+%
+% \begin{importantnote}
+% 本文档只能使用\textnormal{\XeLaTeX}或\textnormal{\LuaLaTeX}（推荐）编译。
+% \end{importantnote}
+%
+% 在源文件开头处选择加载本文档类型，即可使用本模板，如下所示：
+% \begin{verbatim}
+%     \documentclass{itecreport-zh}
+% \end{verbatim}
+%
+% \subsection{基本字段设置}
+%
+% 模板中定义一些命令用于设置文档中的字段。其中一部分命令是以\verb+\zhX{<Chinese var>}+，\verb+\enX{<English var>}+和\verb+\X{<Chinese var>}{<English var>}+的形式出现，他们分别意味着设置字段\verb+X+的中文部分，英文部分及一同设定。
+%
+% \begin{function}{\reportno}
+%     \begin{syntax}
+%     \cs{reportno}\Arg{Report Number}
+%     \end{syntax}
+%     该命令用于设置文档编号。该命令是可选的，如果不加以设定，封面处不会显示相应项。
+% \end{function}
+%
+% \begin{function}{\zhtitle,\entitle,\title}
+%     \begin{syntax}
+%     \cs{zhtitle}\Arg{Chinese title}
+%     \cs{entitle}\Arg{English title}
+%     \cs{title}\Arg{Chinese title}\Arg{English title}
+%     \end{syntax}
+%     这一组命令用于设定文档的中英文标题。
+% \end{function}
+%
+% \begin{function}{\zhauthor,\enauthor,\author}
+%     \begin{syntax}
+%     \cs{zhauthor}\Arg{Chinese author}
+%     \cs{enauthor}\Arg{English author}
+%     \cs{author}\Arg{Chinese author}\Arg{English author}
+%     \end{syntax}
+%     这一组命令用于设定文档的中英文作者名。
+% \end{function}
+%
+% \begin{function}{\date}
+%     \begin{syntax}
+%     \cs{date}\Arg{Year}\Arg{Month}\Arg{Day}
+%     \end{syntax}
+%     该命令用于设定文档的日期。如果不设定，则会选择当前编译日期作为文档的日期。
+% \end{function}
+%
+% \begin{function}{\zhsupervisor,\ensupervisor,\supervisor}
+%     \begin{syntax}
+%     \cs{zhsupervisor}\Arg{Chinese supervisor}
+%     \cs{ensupervisor}\Arg{English supervisor}
+%     \cs{supervisor}\Arg{Chinese supervisor}\Arg{English supervisor}
+%     \end{syntax}
+%     这一组命令用于设定文档的中英文指导老师名（含职称）。该命令是可选的，如果不加以设定，封面处不会显示相应项。
+% \end{function}
+%
+% \begin{function}{\zhabstract,\enabstract,\abstract}
+%     \begin{syntax}
+%     \cs{zhabstract}\Arg{Chinese abstract}
+%     \cs{enabstract}\Arg{English abstract}
+%     \cs{abstract}\Arg{Chinese abstract}\Arg{English abstract}
+%     \end{syntax}
+%     这一组命令用于设定文档的中英文摘要。
+% \end{function}
+%
+% \begin{function}{\zhkeywords,\enkeywords,\keywords}
+%     \begin{syntax}
+%     \cs{zhkeywords}\Arg{Chinese keywords}
+%     \cs{enkeywords}\Arg{English keywords}
+%     \cs{keywords}\Arg{Chinese keywords}\Arg{English keywords}
+%     \end{syntax}
+%     这一组命令用于设定文档的中英文关键字。
+% \end{function}
+%
+% \subsection{其它基本命令}
+%
+% 下面来介绍其它基本命令。
+%
+% \begin{function}{\frontmatter,\mainmatter,\backmatter}
+%     这一组命令用于设定论文的状态、改变样式，其具体使用见\nameref{sec:简单示例}。\verb+\frontmatter+用在文档最开始，表明文档的前言部分（如封面，摘要，目录等）的开始。\verb+\mainmatter+表示论文正文的开始。\verb+\backmatter+表示论文正文的结束。
+% \end{function}
+%
+% \begin{function}{\maketitle,\makecover}
+%     \verb+\maketitle+和\verb+\makecover+作用相同，用于生成封面和版权页面。
+% \end{function}
+%
+% \begin{function}{\makeabstract}
+%     用于生成中英文摘要页面。
+% \end{function}
+%
+% \begin{function}{\tableofcontents}
+%     用于生成目录。
+% \end{function}
+%
+% \begin{function}{\zhdateformat,\endateformat}
+%     用于打印中英文日期。
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{ack}
+%     \verb+ack+环境用于致谢页面。使用方法如下：
+%     \begin{verbatim}
+%     \begin{ack}
+%         <content>
+%     \end{ack}
+%     \end{verbatim}
+%
+% \begin{function}{\bibliography}
+%     \begin{syntax}
+%     \cs{bibliography}\Arg{.bib file}
+%     \end{syntax}
+%     用于生成参考文献。
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{appendix}
+%     \verb+appendix+环境用于附录环境。你可以将附录置于\verb+appendix+环境中，如：
+%     \begin{verbatim}
+%     \begin{appendix}
+%         <content>
+%     \end{appendix}
+%     \end{verbatim}
+% \begin{function}{\appendix}
+%     或者使用\verb+\appendix+代表后文均为附录，如：
+%     \begin{verbatim}
+%     \appendix
+%     <content>
+%     \end{verbatim}
+% \end{function}
+%
+% \begin{function}{\listoffigures,\listoftables}
+%     这两个命令分别用于生成图片和表格索引，可以根据要求在论文前言中使用或附录中使用。
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{publications}
+%     \verb+publications+环境用于已发表论文页面。一般用于附录中。使用上同\verb+enumerate+环境。如下：
+%     \begin{verbatim}
+%     \begin{publications}
+%         \item <thesis>
+%         <...>
+%     \end{publications}
+%     \end{verbatim}
+%
+% \begin{function}{\TurnOffTabFontSetting,\TurnOnTabFontSetting}
+%     因为模板中设定了表格的行距和字号，使得使用中无法临时自定义表格的行距和字号。故提供两个命令用于关闭和开启默认表格的行距和字号设置。比如你如果需要输出一个自己定义字号的表格，可以使用如下示例：
+%     \begin{verbatim}
+%     \begingroup
+%     \TurnOffTabFontSetting
+%     \footnotesize % 设置字号
+%     \begin{tabular}{...}
+%         <content>
+%     \end{tabular}
+%     \TurnOnTabFontSetting
+%     \endgroup
+%     \end{verbatim}
+% \end{function}
+%
+% \begin{function}{\email}
+%     \begin{syntax}
+%     \cs{email}\Arg{Email Address}
+%     \end{syntax}
+%     用于生成邮箱地址。如\verb+\email{name@example.com}+会生成如下效果的地址：\email{name@example.com}。
+% \end{function}
+%
+% \section{简单示例}\label{sec:简单示例}
+% 如下为一个使用本模板的简单示例。更完整的例子请见\texttt{itecreport-zh-example.tex}文件，其效果见\href{https://github.com/hust-latex/itecreport/raw/master/itecreport/itecreport-zh-example.pdf}{\texttt{itecreport-zh-example.pdf}}。
+%
+% \iffalse
+%<*driver>
+% \fi
+\begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass{itecreport-zh}
+
+\reportno{12345} % 可选
+\title{中文标题}{英文标题}
+\author{作者名}{作者名拼音}
+\supervisor{指导老师中文}{指导老师英文} % 可选
+\date{2013}{6}{1}
+
+\zhabstract{中文摘要}
+\zhkeywords{中文关键字}
+\enabstract{英文摘要}
+\enkeywords{英文关键字}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\makeabstract
+\tableofcontents
+\listoffigures
+\listoftables
+\mainmatter
+
+%% 正文
+
+\backmatter
+
+\begin{ack}
+%% 致谢
+\end{ack}
+\bibliography{参考文献.bib文件}
+
+\appendix
+
+\begin{publications}
+%% 发表过的论文列表
+\end{publications}
+
+%% 附录剩余部分
+
+\end{document}
+\end{lstlisting}
+% \iffalse
+%</driver>
+% \fi
+%
+% \section{预设宏包介绍}
+%
+% 本模板中预设了一些宏包，下面对其进行简单介绍。
+%
+% \begin{itemize}
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/algorithm2e.html}{\textsf{algorithm2e}} 算法环境。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/enumitem.html}{\textsf{enumitem}} 自定义列表环境的式样。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/fancynum.html}{\textsf{fancynum}} 用于将大数每三位断开。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/listings.html}{\textsf{listings}} 代码环境。如需更好的代码高亮可以使用\href{http://mirrors.ctan.org/help/Catalogue/entries/minted.html}{\textsf{minted}}宏包。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/longtable.html}{\textsf{longtable}} 跨页的超长表格环境。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/ltxtable.html}{\textsf{ltxtable}} \textsf{longtable}环境和\textsf{tabularx}环境的合并。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/multirow.html}{\textsf{multirow}} 用于表格中合并行。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/overpic.html}{\textsf{overpic}} 用于在图片上层叠其他内容。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/tabularx.html}{\textsf{tabularx}} 扩展到表格环境。
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/zhnumber.html}{\textsf{zhnumber}} 用于生成中文数字。
+% \end{itemize}
+%
+% \section{高级设置}
+%
+% \subsection{切换字体}
+%
+% 模板正文字体为宋体（\textsf{AdobeSongStd-Light}），同时我们提供如下命令切换中文字体：
+%
+% \begin{function}{\HEI,\hei}
+%     \begin{syntax}
+%     \{\cs{HEI} \meta{content}\}
+%     \cs{hei}\Arg{content}
+%     \end{syntax}
+%     切换字体为黑体（\textsf{AdobeHeitiStd-Regular}）。
+% \end{function}
+%
+% \begin{function}{\KAI,\kai}
+%     \begin{syntax}
+%     \{\cs{KAI} \meta{content}\}
+%     \cs{kai}\Arg{content}
+%     \end{syntax}
+%     切换字体为楷体（\textsf{AdobeKaitiStd-Regular}）。
+% \end{function}
+%
+% \begin{function}{\FANGSONG,\fangsong}
+%     \begin{syntax}
+%     \{\cs{FANGSONG} \meta{content}\}
+%     \cs{fangsong}\Arg{content}
+%     \end{syntax}
+%     切换字体为仿宋（\textsf{AdobeFangsongStd-Regular}）。
+% \end{function}
+%
+% 如果需要加载其他字体，请参阅宏包\href{http://mirrors.ctan.org/help/Catalogue/entries/fontspec.html}{\textsf{fontspec}}，宏包\href{http://mirrors.ctan.org/help/Catalogue/entries/xecjk.html}{\textsf{xeCJK}}（对于\XeLaTeX{}）和宏包\href{http://mirrors.ctan.org/help/Catalogue/entries/luatexja.html}{\textsf{luatex-ja}}（对于\LuaLaTeX{}）的文档。
+%
+% \part{Usage of English Version Template}\label{part:Usage of English Version Template}
+%
+% \section{Requirement}
+% Install the latest version of \href{http://www.tug.org/texlive/}{\texttt{Texlive}}(Recommend) or \href{http://miktex.org/}{\texttt{MiKTex}}. Please ensure that all the packages are up-to-date.
+%
+% \section{Installation}
+%
+% \subsection{Install into local}
+%
+% Use the command below to install this template into local.
+% \begin{verbatim}
+%    make install
+% \end{verbatim}
+% If you need uninstall it, use the command below.
+% \begin{verbatim}
+%    make uninstall
+% \end{verbatim}
+%
+% For Windows User who don't install \texttt{Make}, use the command below to install.
+% \begin{verbatim}
+%     makewin32.bat install
+% \end{verbatim}
+% If you need uninstall it, use the command below.
+% \begin{verbatim}
+%     makewin32.bat uninstall
+% \end{verbatim}
+% Although \texttt{makewin32.bat} behaves much like \texttt{Makefile}, I still
+% recommend you install \texttt{Make} into your Windows. You can download
+% it from \href{http://gnuwin32.sourceforge.net/packages/make.htm}{here}.
+%
+% \subsection{Use without installation}
+%
+% If you want to use this template temporary rather than installing it into local for long term use. Run below command to unpack the package.
+% \begin{verbatim}
+%     make unpack
+% \end{verbatim}
+% For Windows User who don't install \texttt{Make}, use the command below to unpack the package.
+% \begin{verbatim}
+%     makewin32.bat unpack
+% \end{verbatim}
+% Then copy the file \texttt{itecreport-en.cls} from directory \texttt{itecreport} into your \TeX{} project root directory.
+%
+% \section{Usage}
+% \begin{importantnote}
+% This template can only be compiled by \\
+% \hskip 10pt \textnormal{\XeLaTeX} or\textnormal{\LuaLaTeX}(Recommend).
+% \end{importantnote}
+%
+% Insert below code in the top of source code to use this template:
+% \begin{verbatim}
+%     \documentclass{itecreport-en}
+% \end{verbatim}
+%
+% \subsection{Variables setting}
+%
+% There're some commands which are used to set the variables for the report.
+%
+% \begin{function}{\reportno}
+%     \begin{syntax}
+%     \cs{reportno}\Arg{Report Number}
+%     \end{syntax}
+%     Set report number if you have. Otherwise it will not be shown in tiltepage.
+% \end{function}
+%
+% \begin{function}{\title}
+%     \begin{syntax}
+%     \cs{title}\Arg{title}
+%     \end{syntax}
+%     Set title.
+% \end{function}
+%
+% \begin{function}{\author}
+%     \begin{syntax}
+%     \cs{author}\Arg{author}
+%     \end{syntax}
+%     Set author.
+% \end{function}
+%
+% \begin{function}{\date}
+%     \begin{syntax}
+%     \cs{date}\Arg{Year}\Arg{Month}\Arg{Day}
+%     \end{syntax}
+%     Set date. If you don't set it, template will use current date.
+% \end{function}
+%
+% \begin{function}{\supervisor}
+%     \begin{syntax}
+%     \cs{supervisor}\Arg{supervisor}
+%     \end{syntax}
+%     Set your supervisor if you have. Otherwise it will not be shown in tiltepage.
+% \end{function}
+%
+% \begin{function}{\abstract}
+%     \begin{syntax}
+%     \cs{abstract}\Arg{abstract}
+%     \end{syntax}
+%     Put your abstract.
+% \end{function}
+%
+% \begin{function}{\keywords}
+%     \begin{syntax}
+%     \cs{keywords}\Arg{keywords}
+%     \end{syntax}
+%     Put your keywords.
+% \end{function}
+%
+% \subsection{Other commands}
+%
+% \begin{function}{\frontmatter,\mainmatter,\backmatter}
+%     Used to determine the different part of document. You can see the example at \autoref{sec:simple-example}.
+% \end{function}
+%
+% \begin{function}{\maketitle,\makecover}
+%     \verb+\maketitle+ and \verb+\makecover+ are the same. Used to create the title page.
+% \end{function}
+%
+% \begin{function}{\makeabstract}
+%     Used to create abstract page.
+% \end{function}
+%
+% \begin{function}{\tableofcontents}
+%     Used to create table of contents.
+% \end{function}
+%
+% \begin{function}{\dateformat}
+%     Used to print the date.
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{ack}
+%     The \verb+ack+ environment is used to create acknowledge page.
+%     \begin{verbatim}
+%     \begin{ack}
+%         <content>
+%     \end{ack}
+%     \end{verbatim}
+%
+% \begin{function}{\bibliography}
+%     \begin{syntax}
+%     \cs{bibliography}\Arg{.bib file}
+%     \end{syntax}
+%     Used to create bibliography page.
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{appendix}
+%     The \verb+appendix+ environment is for appendix of course. Used like this:
+%     \begin{verbatim}
+%     \begin{appendix}
+%         <content>
+%     \end{appendix}
+%     \end{verbatim}
+% \begin{function}{\appendix}
+%     Or simple use \verb+\appendix+ to indicate that the rest of document are all in appendix, like this:
+%     \begin{verbatim}
+%     \appendix
+%     <content>
+%     \end{verbatim}
+% \end{function}
+%
+% \begin{function}{\listoffigures,\listoftables}
+%     Create the index for all the figures and tables separately.
+% \end{function}
+%
+% \vskip 1ex\DescribeEnv{publications}
+%     The \verb+publications+ environment is where you list all of your published thesises. It's usually putted in appendix.
+%     \begin{verbatim}
+%     \begin{publications}
+%         \item <thesis>
+%         <...>
+%     \end{publications}
+%     \end{verbatim}
+%
+% \begin{function}{\TurnOffTabFontSetting,\TurnOnTabFontSetting}
+%     This template has set the font size and line spread for all the tables which makes it's impossible to change font format temporary in one table.  So it provides these to command to temporary disable or enable default font setting in table. For example, if you want to change table font size, you can use the code like this:
+%     \begin{verbatim}
+%     \begingroup
+%     \TurnOffTabFontSetting
+%     \footnotesize % Set your font format as you like.
+%     \begin{tabular}{...}
+%         <content>
+%     \end{tabular}
+%     \TurnOnTabFontSetting
+%     \endgroup
+%     \end{verbatim}
+% \end{function}
+%
+% \begin{function}{\email}
+%     \begin{syntax}
+%     \cs{email}\Arg{Email Address}
+%     \end{syntax}
+%     A command to display email address. For example, \verb+\email{name@example.com}+ would look like this: \email{name@example.com}.
+% \end{function}
+%
+% \section{Simple example}\label{sec:simple-example}
+% Below is a simple example of using this template. For a complete example see \texttt{itecreport-en-example.tex} which will generate \href{https://github.com/hust-latex/itecreport/raw/master/itecreport/itecreport-en-example.pdf}{\texttt{itecreport-en-example.pdf}}.
+%
+% \iffalse
+%<*driver>
+% \fi
+\begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass{itecreport-en}
+
+\reportno{12345} % Optional
+\title{your title}
+\author{your name}
+\supervisor{your supervisor} % Optional
+\date{2013}{6}{1}
+
+\abstract{the abstract}
+\keywords{the keywords}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\makeabstract
+\tableofcontents
+\listoffigures
+\listoftables
+\mainmatter
+
+%% main body
+
+\backmatter
+
+\begin{ack}
+%% acknowledge
+\end{ack}
+\bibliography{.bib file}
+
+\appendix
+
+\begin{publications}
+%% your publications
+\end{publications}
+
+%% rest of appendix
+
+\end{document}
+\end{lstlisting}
+% \iffalse
+%</driver>
+% \fi
+%
+% \section{Introduction to some packages used in the template}
+%
+% Here's a list of some packages used in the template.
+%
+% \begin{itemize}
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/algorithm2e.html}{\textsf{algorithm2e}} For display algorithm.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/enumitem.html}{\textsf{enumitem}} For set the style of enumerate, itemize and description environment.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/fancynum.html}{\textsf{fancynum}} Display the really big number.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/listings.html}{\textsf{listings}} For display the highlighted code. If you need better quality, use the package \href{http://mirrors.ctan.org/help/Catalogue/entries/minted.html}{\textsf{minted}}.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/longtable.html}{\textsf{longtable}} Create a very long table.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/ltxtable.html}{\textsf{ltxtable}} Combine the features of \textsf{longtable} anb \textsf{tabularx}.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/multirow.html}{\textsf{multirow}} Combine multi-rows in table.
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/overpic.html}{\textsf{overpic}} Put something over a picture,
+%     \item \href{http://mirrors.ctan.org/help/Catalogue/entries/tabularx.html}{\textsf{tabularx}} A better table environment.
+% \end{itemize}
+%
+% \StopEventually{
+%  \begingroup
+%  \hypersetup{bookmarksopenlevel=0}
+%  \PrintIndex
+%  \endgroup
+% }
+%
+% \begingroup
+% \hypersetup{bookmarksopenlevel=0}
+% \part{Implementation}\label{part:Implementation}
+%
+%    \begin{macrocode}
+%<*class>
+\RequirePackage{ifthen}
+%    \end{macrocode}
+%
+% \section{Process Options}
+% Process options and load class |book|.
+%    \begin{macrocode}
+\RequirePackage{xkeyval}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+\ProcessOptionsX
+\LoadClass[12pt, a4paper, openany]{book}
+%    \end{macrocode}
+%
+% \section{Check Engine}
+% Check engine, only \XeLaTeX{} and \LuaLaTeX{} are supported.
+%    \begin{macrocode}
+\RequirePackage{iftex}
+\ifXeTeX\else
+  \ifLuaTeX\else
+    \begingroup
+      \errorcontextlines=-1\relax
+      \newlinechar=10\relax
+      \errmessage{^^J
+      *******************************************************^^J
+      * XeTeX or LuaTeX is required to compile this document.^^J
+      * Sorry!^^J
+      *******************************************************^^J
+      }%
+    \endgroup
+  \fi
+\fi
+%    \end{macrocode}
+%
+% \section{Font Setting}
+% Set font used in document. Firstly, it's font setting for English version template (\textsf{itecreport-en}). We use \href{http://mirrors.ctan.org/help/Catalogue/entries/fontspec}{\texttt{fontspec}} package to handle font. We choose \textsf{Tex Gyre Termes}, \textsf{Droid Sans} and \textsf{CMU Typewriter Text} as document main font, sans font and mono font.
+%    \begin{macrocode}
+%<*class-en>
+\RequirePackage{fontspec}
+\setmainfont[
+  Ligatures={Common,TeX},
+  Extension=.otf,
+  UprightFont=*-regular,
+  BoldFont=*-bold,
+  ItalicFont=*-italic,
+  BoldItalicFont=*-bolditalic]{texgyretermes}
+\setsansfont[Ligatures={Common,TeX}]{Droid Sans}
+\setmonofont{CMU Typewriter Text}
+\defaultfontfeatures{Mapping=tex-text}
+%</class-en>
+%    \end{macrocode}
+%
+% Below is the font setting for Chinese version template (\textsf{itecreport-zh}). The Chinese version template chooses the same English font as English version. We use  \href{http://mirrors.ctan.org/help/Catalogue/entries/xecjk}{\texttt{xecjk}} package (for \XeLaTeX) or \href{http://mirrors.ctan.org/help/Catalogue/entries/luatexja}{\texttt{luatex-ja}} package (for \LuaLaTeX, recommend) to handle Chinese font. We will use font: \textsf{AdobeSongStd-Light}, \textsf{AdobeKaitiStd-Regular}, \textsf{AdobeHeitiStd-Regular} and \textsf{AdobeFangsongStd-Regular}.
+%    \begin{macrocode}
+%<*class-zh>
+\ifXeTeX  % XeTeX下使用fontspec + xeCJK处理字体
+  % 英文字体
+  \RequirePackage{fontspec}
+  \RequirePackage{xunicode}
+  \setmainfont[
+    Ligatures={Common,TeX},
+    Extension=.otf,
+    UprightFont=*-regular,
+    BoldFont=*-bold,
+    ItalicFont=*-italic,
+    BoldItalicFont=*-bolditalic]{texgyretermes}
+  \setsansfont[Ligatures={Common,TeX}]{Droid Sans}
+  \setmonofont{CMU Typewriter Text}
+  \defaultfontfeatures{Mapping=tex-text}
+  % 中文字体
+  \RequirePackage[CJKmath]{xeCJK}
+  \setCJKmainfont[
+   BoldFont={Adobe Heiti Std},
+   ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+  \setCJKsansfont{Adobe Kaiti Std}
+  \setCJKmonofont{Adobe Fangsong Std}
+  \xeCJKsetup{PunctStyle=kaiming}
+%    \end{macrocode}
+%
+% \begin{macro}{\HEI}
+%    \begin{macrocode}
+  \newCJKfontfamily\HEI{Adobe Heiti Std}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\KAI}
+%    \begin{macrocode}
+  \newCJKfontfamily\KAI{Adobe Kaiti Std}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\FANGSONG}
+%    \begin{macrocode}
+  \newCJKfontfamily\FANGSONG{Adobe Fangsong Std}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\hei}
+%    \begin{macrocode}
+  \newcommand{\hei}[1]{{\HEI #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\kai}
+%    \begin{macrocode}
+  \newcommand{\kai}[1]{{\KAI #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fangsong}
+%    \begin{macrocode}
+  \newcommand{\fangsong}[1]{{\FANGSONG #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\else\fi
+\ifLuaTeX  % LuaTeX下使用luatex-ja处理字体 [推荐]
+  \RequirePackage{luatexja-fontspec}
+  % 英文字体
+  \setmainfont[Ligatures={Common,TeX}]{Tex Gyre Termes}
+  \setsansfont[Ligatures={Common,TeX}]{Droid Sans}
+  \setmonofont{CMU Typewriter Text}
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  % 中文字体
+  \setmainjfont[
+   BoldFont={AdobeHeitiStd-Regular},
+   ItalicFont={AdobeKaitiStd-Regular}]{AdobeSongStd-Light}
+  \setsansjfont{AdobeKaitiStd-Regular}
+  \defaultjfontfeatures{JFM=kaiming}
+%    \end{macrocode}
+%
+% \begin{macro}{\HEI}
+%    \begin{macrocode}
+  \newjfontfamily\HEI{AdobeHeitiStd-Regular}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\KAI}
+%    \begin{macrocode}
+  \newjfontfamily\KAI{AdobeKaitiStd-Regular}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\FANGSONG}
+%    \begin{macrocode}
+  \newjfontfamily\FANGSONG{AdobeFangsongStd-Regular}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\hei}
+%    \begin{macrocode}
+  \newcommand{\hei}[1]{{\jfontspec{AdobeHeitiStd-Regular} #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\kai}
+%    \begin{macrocode}
+  \newcommand{\kai}[1]{{\jfontspec{AdobeKaitiStd-Regular} #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fangsong}
+%    \begin{macrocode}
+  \newcommand{\fangsong}[1]{{\jfontspec{AdobeFangsongStd-Regular} #1}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\else\fi
+%    \end{macrocode}
+%
+% Chinese number for \textsf{itecreport-zh} using \href{http://mirrors.ctan.org/help/Catalogue/entries/zhnumber}{\texttt{zhnumber}}.
+%    \begin{macrocode}
+\RequirePackage{zhnumber}
+\def\CJKnumber#1{\zhnumber{#1}} % 兼容CJKnumb
+%</class-zh>
+%    \end{macrocode}
+%
+% \section{Basic Format}
+% We set global line spread to 1.2.
+%    \begin{macrocode}
+\linespread{1.2}\selectfont
+%    \end{macrocode}
+%
+% Use \href{http://mirrors.ctan.org/help/Catalogue/entries/geometry}{\texttt{geometry}} package to handle paper page.
+%    \begin{macrocode}
+\RequirePackage{geometry}
+\geometry{
+  top=1.2in,
+  bottom=1.2in,
+  left=1in,
+  right=1in,
+  includefoot
+}
+\ifthenelse{\isundefined{\pagewidth}}{
+  \pdfpagewidth=\paperwidth
+  \pdfpageheight=\paperheight
+}{
+  \pagewidth=\paperwidth
+  \pageheight=\paperheight
+}
+%    \end{macrocode}
+%
+% Indent of paragraph and skip between paragraphs.
+%    \begin{macrocode}
+\RequirePackage{indentfirst}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt plus 2pt minus 1pt}
+%    \end{macrocode}
+%
+% Packages to handle color.
+%    \begin{macrocode}
+\RequirePackage{color}
+\RequirePackage[table]{xcolor}
+%    \end{macrocode}
+%
+% Use \href{http://mirrors.ctan.org/help/Catalogue/entries/hyperref}{\texttt{hyperref}} package to generate cross-reference link.
+%    \begin{macrocode}
+\RequirePackage[unicode]{hyperref}
+\definecolor{ITEC@hyperreflinkred}{RGB}{128,23,31}
+\hypersetup{
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  breaklinks=true,
+  colorlinks=true,
+  allcolors=ITEC@hyperreflinkred,
+  linktoc=page,
+  plainpages=false,
+  pdfpagelabels=true,
+  pdfstartview={XYZ null null 1},
+%<class-zh>pdfinfo={Template.Info={itecreport-zh.cls 2013/06/01, Copyright (C) 2013-2014 by Xu Cheng 2014 by hust-latex, https://github.com/hust-latex/itecreport}}
+%<class-en>pdfinfo={Template.Info={itecreport-en.cls 2013/06/01, Copyright (C) 2013-2014 by Xu Cheng 2014 by hust-latex, https://github.com/hust-latex/itecreport}}
+}
+%    \end{macrocode}
+%
+% \section{Load Packages}
+% Load packages for math.
+%    \begin{macrocode}
+\RequirePackage{amsmath,amssymb,amsfonts}
+\RequirePackage[amsmath,amsthm,thmmarks,hyperref,thref]{ntheorem}
+\RequirePackage{fancynum}
+\setfnumgsym{\,}
+\RequirePackage[lined,boxed,linesnumbered,ruled,vlined]{algorithm2e}
+%    \end{macrocode}
+%
+% Load packages for picture.
+%    \begin{macrocode}
+\RequirePackage{overpic}
+\RequirePackage{graphicx,caption,subcaption}
+%    \end{macrocode}
+%
+% Load packages for table.
+%    \begin{macrocode}
+\RequirePackage{array}
+\RequirePackage{multirow,tabularx,ltxtable}
+%    \end{macrocode}
+%
+% Load package for code highlight. Here we use \href{http://mirrors.ctan.org/help/Catalogue/entries/listings}{\texttt{listings}} to highlight the code. But if you need more features, use \href{http://mirrors.ctan.org/help/Catalogue/entries/minted}{\texttt{minted}}.
+%    \begin{macrocode}
+\RequirePackage{listings}
+%    \end{macrocode}
+%
+% Load package for bibliography cite style.
+%    \begin{macrocode}
+\RequirePackage[numbers,square,comma,sort&compress]{natbib}
+%    \end{macrocode}
+%
+% Other packages for style setting.
+%    \begin{macrocode}
+\RequirePackage{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage{tocvsec2}
+\RequirePackage[inline]{enumitem}
+\RequirePackage{fancyhdr}
+\RequirePackage{afterpage}
+\RequirePackage{datenumber}
+\RequirePackage{etoolbox}
+\RequirePackage{appendix}
+\RequirePackage[titles]{tocloft}
+\RequirePackage{xstring}
+\RequirePackage{perpage}
+%    \end{macrocode}
+%
+% \section{Localization}
+% Chinese localization.
+% \footnote{The |autorefname| Reference:\url{http://tex.stackexchange.com/questions/52410/how-to-use-the-command-autoref-to-implement-the-same-effect-when-use-the-comman}}
+%    \begin{macrocode}
+%<*class-zh>
+\def\indexname{索引}
+\def\figurename{图}
+\def\tablename{表}
+\AtBeginDocument{\def\listingscaption{代码}}
+\def\bibname{参考文献}
+\def\contentsname{目\hspace{1em}录}
+\def\contentsnamenospace{目录}
+\def\appendixname{附录}
+\def\ITEC@listfigurename{插图索引}
+\def\ITEC@listtablename{表格索引}
+\def\equationautorefname{公式}
+\def\footnoteautorefname{脚注}
+\def\itemautorefname~#1\null{第~#1~项\null}
+\def\figureautorefname{图}
+\def\tableautorefname{表}
+\def\appendixautorefname{附录}
+\expandafter\def\csname\appendixname autorefname\endcsname{\appendixname}
+\def\chapterautorefname~#1\null{第\zhnumber{#1}章\null}
+\def\sectionautorefname~#1\null{#1~小节\null}
+\def\subsectionautorefname~#1\null{#1~小节\null}
+\def\subsubsectionautorefname~#1\null{#1~小节\null}
+\def\FancyVerbLineautorefname~#1\null{第~#1~行\null}
+\def\pageautorefname~#1\null{第~#1~页\null}
+\def\lstlistingautorefname{代码}
+\def\definitionautorefname{定义}
+\def\propositionautorefname{命题}
+\def\lemmaautorefname{引理}
+\def\theoremautorefname{定理}
+\def\axiomautorefname{公理}
+\def\corollaryautorefname{推论}
+\def\exerciseautorefname{练习}
+\def\exampleautorefname{例}
+\def\proofautorefname{证明}
+\SetAlgorithmName{算法}{算法}{算法索引}
+\SetAlgoProcName{过程}{过程}
+\SetAlgoFuncName{函数}{函数}
+\def\AlgoLineautorefname~#1\null{第~#1~行\null}
+%</class-zh>
+%    \end{macrocode}
+%
+% English localization.
+%    \begin{macrocode}
+%<*class-en>
+\def\ITEC@listfigurename{List of Figures}
+\def\ITEC@listtablename{List of Tables}
+\def\equationautorefname{Equation}
+\def\footnoteautorefname{Footnote}
+\def\itemautorefname{Item}
+\def\figureautorefname{Figure}
+\def\tableautorefname{Table}
+\def\appendixautorefname{Appendix}
+\expandafter\def\csname\appendixname autorefname\endcsname{\appendixname}
+\def\chapterautorefname{Chapter}
+\def\sectionautorefname{Section}
+\def\subsectionautorefname{Subsection}
+\def\subsubsectionautorefname{Sub-subsection}
+\def\FancyVerbLineautorefname{Line}
+\def\pageautorefname{Page}
+\def\lstlistingautorefname{Code Fragment}
+\def\definitionautorefname{Definition}
+\def\propositionautorefname{Proposition}
+\def\lemmaautorefname{Lemma}
+\def\theoremautorefname{Theorem}
+\def\axiomautorefname{Axiom}
+\def\corollaryautorefname{Corollary}
+\def\exerciseautorefname{Exercise}
+\def\exampleautorefname{Example}
+\def\proofautorefname{Proof}
+\SetAlgorithmName{Algorithm}{Algorithm}{List of Algorithms}
+\SetAlgoProcName{Procedure}{Procedure}
+\SetAlgoFuncName{Function}{Function}
+\def\AlgoLineautorefname{Line}
+%</class-en>
+%    \end{macrocode}
+%
+% Internal variables.
+%    \begin{macrocode}
+%<*class-en|class-zh>
+\long\def\ITEC@entitletitle{Huazhong University of Science and Technology\\Department of Electronics and Information Engineering\\Internet Technology and Engineering R\char38D Center\\[0.8cm]Technical Report}
+\def\ITEC@enauthortitle{Author}
+\def\ITEC@ensupervisortitle{Supervisor}
+\def\ITEC@enabstractname{Abstract}
+\def\ITEC@enkeywordstitle{Key words:}
+%</class-en|class-zh>
+%<*class-en>
+\def\ITEC@ackname{Acknowledge}
+\def\ITEC@publicationtitle{Publication}
+%</class-en>
+%<*class-zh>
+\long\def\ITEC@zhtitletitle{华中科技大学 电子与信息工程系\\湖北省智能互联网技术重点实验室\\[0.8cm]技术报告}
+\def\ITEC@zhauthortitle{作者}
+\def\ITEC@zhsupervisortitle{指导教师}
+\def\ITEC@zhabstractname{摘\hspace{1em}要}
+\def\ITEC@zhabstractnamenospace{摘要}
+\def\ITEC@zhkeywordstitle{关键词：}
+\def\ITEC@ackname{致\hspace{1em}谢}
+\def\ITEC@acknamenospace{致谢}
+\def\ITEC@publicationtitle{在实验室期间发表的学术论文}
+%</class-zh>
+%    \end{macrocode}
+%
+% Set |\listfigurename| and |\listtablename|.
+%    \begin{macrocode}
+\def\listfigurename{\ITEC@listfigurename}
+\def\listtablename{\ITEC@listtablename}
+%    \end{macrocode}
+%
+% \section{Style Setting}
+% \subsection{Equation Style}
+% Allow long equation breaking between lines or pages.
+%    \begin{macrocode}
+\allowdisplaybreaks[4]
+%    \end{macrocode}
+%
+% Set skip between equation and context.
+%    \begin{macrocode}
+\abovedisplayskip=10bp plus 2bp minus 2bp
+\abovedisplayshortskip=10bp plus 2bp minus 2bp
+\belowdisplayskip=\abovedisplayskip
+\belowdisplayshortskip=\abovedisplayshortskip
+%    \end{macrocode}
+%
+% Set equation numbering style.
+%    \begin{macrocode}
+\numberwithin{equation}{chapter}
+%    \end{macrocode}
+%
+% \subsection{Theorem Style}
+% We use \href{http://mirrors.ctan.org/help/Catalogue/entries/amsthm}{\texttt{amsthm}} to handle the proof environment and use \href{http://mirrors.ctan.org/help/Catalogue/entries/ntheorem}{\texttt{ntheorem}} to handle other theorem environments.
+%    \begin{macrocode}
+\theoremnumbering{arabic}
+%<class-zh>\theoremseparator{：}
+%<class-en>\theoremseparator{:}
+\theorempreskip{1.2ex plus 0ex minus 1ex}
+\theorempostskip{1.2ex plus 0ex minus 1ex}
+\theoremheaderfont{\normalfont\bfseries\HEI}
+\theoremsymbol{}
+
+\theoremstyle{definition}
+\theorembodyfont{\normalfont}
+%<class-zh>\newtheorem{definition}{定义}[chapter]
+%<class-en>\newtheorem{definition}{Definition}[chapter]
+
+\theoremstyle{plain}
+\theorembodyfont{\itshape}
+%<class-zh>\newtheorem{proposition}{命题}[chapter]
+%<class-en>\newtheorem{proposition}{Proposition}[chapter]
+%<class-zh>\newtheorem{lemma}{引理}[chapter]
+%<class-en>\newtheorem{lemma}{Lemma}[chapter]
+%<class-zh>\newtheorem{theorem}{定理}[chapter]
+%<class-en>\newtheorem{theorem}{Theorem}[chapter]
+%<class-zh>\newtheorem{axiom}{公理}[chapter]
+%<class-en>\newtheorem{axiom}{Axiom}[chapter]
+%<class-zh>\newtheorem{corollary}{推论}[chapter]
+%<class-en>\newtheorem{corollary}{Corollary}[chapter]
+%<class-zh>\newtheorem{exercise}{练习}[chapter]
+%<class-en>\newtheorem{exercise}{Exercise}[chapter]
+%<class-zh>\newtheorem{example}{例}[chapter]
+%<class-en>\newtheorem{example}{Example}[chapter]
+
+%<class-zh>\def\proofname{\hei{证明}}
+%<class-en>\def\proofname{\textbf{Proof}}
+%    \end{macrocode}
+%
+% \subsection{Floating Objects Style}
+% Set the skip to the context for floating object with argument `h'.
+%    \begin{macrocode}
+\setlength{\intextsep}{0.7\baselineskip plus 0.1\baselineskip minus 0.1\baselineskip}
+%    \end{macrocode}
+%
+% Set the skip to the context for top or bottom floating object.
+%    \begin{macrocode}
+\setlength{\textfloatsep}{0.8\baselineskip plus 0.1\baselineskip minus 0.2\baselineskip}
+%    \end{macrocode}
+%
+% Set the fraction of floating object. Make the fraction less crowded than default value to prevent floating object occupying too much space.
+%    \begin{macrocode}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.65}
+\renewcommand{\floatpagefraction}{0.60}
+%    \end{macrocode}
+%
+% \subsection{Table Style}
+%
+% \begin{macro}{\tabincell}
+% A command make it easier to insert a new table into an existing cell.
+%    \begin{macrocode}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+%    \end{macrocode}
+% \end{macro}
+%
+% To prevent |\cline| breaking page in \href{http://mirrors.ctan.org/help/Catalogue/entries/longtable}{\texttt{longtable}} environment, use in this way:
+% \meta{table content} |\\* \nopagebreak \cline{i-j}|
+% \footnote{Reference:\url{http://tex.stackexchange.com/questions/52100/longtable-multirow-problem-with-cline-and-nopagebreak}}
+%    \begin{macrocode}
+\def\@cline#1-#2\@nil{%
+  \omit
+  \@multicnt#1%
+  \advance\@multispan\m@ne
+  \ifnum\@multicnt=\@ne\@firstofone{&\omit}\fi
+  \@multicnt#2%
+  \advance\@multicnt-#1%
+  \advance\@multispan\@ne
+  \leaders\hrule\@height\arrayrulewidth\hfill
+  \cr
+  \noalign{\nobreak\vskip-\arrayrulewidth}}
+%    \end{macrocode}
+%
+% Here we set the global font setting (font size: 11pt and line spread: 1.4) for tables. But first we will declare a variable to determine whether table global font setting is activated.
+%    \begin{macrocode}
+\newif\ifITEC@useoldtabular
+\ITEC@useoldtabularfalse
+%    \end{macrocode}
+%
+% \begin{macro}{\TurnOffTabFontSetting}
+% Use |\TurnOffTabFontSetting| to deactivate global font setting.
+%    \begin{macrocode}
+\def\TurnOffTabFontSetting{\ITEC@useoldtabulartrue}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\TurnOnTabFontSetting}
+% Use |\TurnOnTabFontSetting| to activate global font setting.
+%    \begin{macrocode}
+\def\TurnOnTabFontSetting{\ITEC@useoldtabularfalse}
+%    \end{macrocode}
+% \end{macro}
+%
+% Hook the \href{http://mirrors.ctan.org/help/Catalogue/entries/tabular}{\texttt{tabular}}, \href{http://mirrors.ctan.org/help/Catalogue/entries/tabularx}{\texttt{tabularx}} and \href{http://mirrors.ctan.org/help/Catalogue/entries/longtable}{\texttt{longtable}} environment to imply the global font setting.
+%    \begin{macrocode}
+\AtBeginEnvironment{tabular}{
+  \ifITEC@useoldtabular\else
+    \fontsize{11pt}{15.4pt}\selectfont
+  \fi
+}
+\AtBeginEnvironment{tabularx}{
+  \ifITEC@useoldtabular\else
+    \fontsize{11pt}{15.4pt}\selectfont
+  \fi
+}
+\AtBeginEnvironment{longtable}{
+  \ifITEC@useoldtabular\else
+    \fontsize{11pt}{15.4pt}\selectfont
+  \fi
+}
+%    \end{macrocode}
+%
+% \subsection{Caption Style}
+% Set caption font size as 11pt, use hang format, remove `:' after number and set the skip between context as 12pt.
+%    \begin{macrocode}
+\DeclareCaptionFont{ITEC@captionfont}{\fontsize{11pt}{13.2pt}\selectfont}
+\DeclareCaptionLabelFormat{ITEC@caplabel}{#1~#2}
+\captionsetup{
+  font=ITEC@captionfont,
+  labelformat=ITEC@caplabel,
+  format=hang,
+  labelsep=quad,
+  skip=12pt
+}
+%    \end{macrocode}
+%
+% Set figure and table numbering style.
+%    \begin{macrocode}
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+\renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
+%    \end{macrocode}
+%
+% \subsection{Code Highlight Style}
+%    \begin{macrocode}
+\definecolor{ITEC@lstgreen}{rgb}{0,0.6,0}
+\definecolor{ITEC@lstmauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  basicstyle=\footnotesize\ttfamily\linespread{1}\selectfont
+%<class-zh>\FANGSONG
+  ,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{ITEC@lstgreen}\itshape
+%<class-zh>\KAI
+  ,
+  stringstyle=\color{ITEC@lstmauve},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  numbers=left,
+  numberstyle=\tiny\color{black},
+  frame=lines,
+  rulecolor=\color{black},
+  breaklines=true
+}
+%    \end{macrocode}
+%
+% \subsection{Section Title Style}
+% Set the numbering depth for section.
+%    \begin{macrocode}
+\setcounter{secnumdepth}{3}
+%    \end{macrocode}
+%
+% Chapter tilte format and spacing setting.
+%    \begin{macrocode}
+\titleformat{\chapter}
+  {
+    \bfseries
+%<class-zh>\HEI
+    \centering
+    \fontsize{18pt}{21.6pt}\selectfont
+  }
+%<class-zh>{\zhnumber{\thechapter}}
+%<class-en>{Chapter~\thechapter}
+  {1em}
+  {}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+%    \end{macrocode}
+%
+% Section tilte format and spacing setting.
+%    \begin{macrocode}
+\titleformat*{\section}{\bfseries
+%<class-zh>\HEI
+\fontsize{16pt}{19.2pt}\selectfont}
+\titlespacing*{\section}{0pt}{18pt}{6pt}
+%    \end{macrocode}
+%
+% Subsection tilte format and spacing setting.
+%    \begin{macrocode}
+\titleformat*{\subsection}{\bfseries
+%<class-zh>\HEI
+\fontsize{14pt}{16.8pt}\selectfont}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+%    \end{macrocode}
+%
+% Subsubsection tilte format and spacing setting.
+%    \begin{macrocode}
+\titleformat*{\subsubsection}{\bfseries
+%<class-zh>\HEI
+\fontsize{13pt}{15.6pt}\selectfont}
+\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
+%    \end{macrocode}
+%
+% \subsection{TOC Style}
+% TOC depth.
+%    \begin{macrocode}
+\setcounter{tocdepth}{2}
+%    \end{macrocode}
+%
+% TOC right margin.
+%    \begin{macrocode}
+\contentsmargin{2.0em}
+%    \end{macrocode}
+%
+% Remove vertical space between two continues chapter entries.
+% \footnote{Reference:\url{http://tex.stackexchange.com/questions/89103/remove-vertical-space-between-two-chapters-in-table-of-contents-in-latex}}
+%    \begin{macrocode}
+\newskip\ITEC@oldcftbeforechapskip
+\ITEC@oldcftbeforechapskip=\cftbeforechapskip
+\newskip\ITEC@oldcftbeforesecskip
+\ITEC@oldcftbeforesecskip=\cftbeforesecskip
+\let\ITEC@oldl@chapter\l@chapter
+\let\ITEC@oldl@section\l@section
+\let\ITEC@oldl@subsection\l@subsection
+\def\l@chapter#1#2{\ITEC@oldl@chapter{#1}{#2}\cftbeforechapskip=3pt}
+\def\l@section#1#2{\ITEC@oldl@section{#1}{#2}\cftbeforechapskip=\ITEC@oldcftbeforechapskip\cftbeforesecskip=3pt}
+\def\l@subsection#1#2{\ITEC@oldl@subsection{#1}{#2}\cftbeforesecskip=\ITEC@oldcftbeforesecskip}
+%    \end{macrocode}
+%
+% Set LOF LOT style.
+% \footnote{Reference:\url{http://www.latex-community.org/viewtopic.php?f=5&t=1838}}
+%    \begin{macrocode}
+\renewcommand*\cftfigpresnum{\figurename~}
+\newlength{\ITEC@cftfignumwidth@tmp}
+\settowidth{\ITEC@cftfignumwidth@tmp}{\cftfigpresnum}
+\addtolength{\cftfignumwidth}{\ITEC@cftfignumwidth@tmp}
+\renewcommand{\cftfigaftersnumb}{\quad~}
+\renewcommand*\cfttabpresnum{\tablename~}
+\newlength{\ITEC@cfttabnumwidth@tmp}
+\settowidth{\ITEC@cfttabnumwidth@tmp}{\cfttabpresnum}
+\addtolength{\cfttabnumwidth}{\ITEC@cfttabnumwidth@tmp}
+\renewcommand{\cfttabaftersnumb}{\quad~}
+%    \end{macrocode}
+%
+% \subsection{Head \& Foot Style}
+%    \begin{macrocode}
+\let\ps@plain\ps@fancy
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\textbf{\leftmark}}
+\fancyhead[R]{\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{
+  \markboth{
+    \ifITEC@inappendix
+      \appendixname~\thechapter
+    \else
+%<class-zh>第\zhnumber{\thechapter}章
+%<class-en>Chapter~\thechapter
+    \fi
+  \hspace{.8em}#1}{}
+}
+\renewcommand{\sectionmark}[1]{
+  \StrLen{#1}[\ITEC@secmark@tmplen]
+  \ifthenelse{\ITEC@secmark@tmplen<20}
+  {\markright{\thesection\hspace{.8em}\emph{#1}}}
+  {\markright{}}
+}
+%    \end{macrocode}
+%
+% \subsection{List Environment Style}
+%    \begin{macrocode}
+\setlist{noitemsep,partopsep=0pt,topsep=.8ex}
+\setlist[1]{labelindent=\parindent}
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label*=\arabic*,ref=\theenumi.\arabic*}
+\setlist[enumerate,3]{label=\emph{\alph*}),ref=\theenumii\emph{\alph*}}
+\setlist[description]{font=\bfseries
+%<class-zh>\HEI
+}
+%    \end{macrocode}
+%
+% \subsection{Footnote Style}
+%    \begin{macrocode}
+\MakePerPage{footnote}
+%    \end{macrocode}
+%
+% \section{Variables Setting}
+% A command to set report number.
+% \begin{macro}{\reportno}
+%    \begin{macrocode}
+\def\reportno#1{\gdef\ITEC@reportno{#1}}
+\reportno{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhtitle,\entitle,\title}
+% Commands to set the title.
+%    \begin{macrocode}
+%<*class-zh>
+\def\zhtitle#1{\gdef\ITEC@zhtitle{#1}\hypersetup{pdftitle={#1}}}
+\def\entitle#1{\gdef\ITEC@entitle{#1}}
+\def\title#1#2{\zhtitle{#1}\entitle{#2}}
+\title{}{}
+%</class-zh>
+%<*class-en>
+\def\title#1{\gdef\ITEC@entitle{#1}\hypersetup{pdftitle={#1}}}
+\title{}
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhauthor,\enauthor,\author}
+% Commands to set the author.
+%    \begin{macrocode}
+%<*class-zh>
+\def\zhauthor#1{\gdef\ITEC@zhauthor{#1}\hypersetup{pdfauthor={#1}}}
+\def\enauthor#1{\gdef\ITEC@enauthor{#1}}
+\def\author#1#2{\zhauthor{#1}\enauthor{#2}}
+\author{}{}
+%</class-zh>
+%<*class-en>
+\def\author#1{\gdef\ITEC@enauthor{#1}\hypersetup{pdfauthor={#1}}}
+\author{}
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\date,\zhdateformat,\endateformat,\dateformat}
+% A command to set the date and several commands to display date.
+%    \begin{macrocode}
+\def\date#1#2#3{
+  \setdate{#1}{#2}{#3}
+}
+\setdatetoday
+%<*class-zh>
+\def\zhdateformat{~\thedateyear~年~\thedatemonth~月~\thedateday~日}
+\def\endateformat{\datedate}
+%</class-zh>
+%<*class-en>
+\def\endateformat{\datedate}
+\let\dateformat\endateformat
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhsupervisor,\ensupervisor,\supervisor}
+% Commands to set the supervisor.
+%    \begin{macrocode}
+%<*class-zh>
+\def\zhsupervisor#1{\gdef\ITEC@zhsupervisor{#1}}
+\def\ensupervisor#1{\gdef\ITEC@ensupervisor{#1}}
+\def\supervisor#1#2{\zhsupervisor{#1}\ensupervisor{#2}}
+\supervisor{}{}
+%</class-zh>
+%<*class-en>
+\def\supervisor#1{\gdef\ITEC@ensupervisor{#1}}
+\supervisor{}
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhabstract,\enabstract,\abstract}
+% Commands to set the abstract.
+%    \begin{macrocode}
+%<*class-zh>
+\long\def\zhabstract#1{\long\gdef\ITEC@zhabstract{#1}}
+\long\def\enabstract#1{\long\gdef\ITEC@enabstract{#1}}
+\long\def\abstract#1#2{\zhabstract{#1}\enabstract{#2}}
+\abstract{}{}
+%</class-zh>
+%<*class-en>
+\long\def\abstract#1{\long\gdef\ITEC@enabstract{#1}}
+\abstract{}
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhkeywords,\enkeywords,\keywords}
+% Commands to set the keywords.
+%    \begin{macrocode}
+%<*class-zh>
+\def\zhkeywords#1{\gdef\ITEC@zhkeywords{#1}\hypersetup{pdfkeywords={#1}}}
+\def\enkeywords#1{\gdef\ITEC@enkeywords{#1}}
+\def\keywords#1#2{\zhkeywords{#1}\enkeywords{#2}}
+\keywords{}{}
+%</class-zh>
+%<*class-en>
+\def\keywords#1{\gdef\ITEC@enkeywords{#1}\hypersetup{pdfkeywords={#1}}}
+\keywords{}
+%</class-en>
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Specical Page}
+% \begin{macro}{\frontmatter,\mainmatter,\backmatter}
+%    \begin{macrocode}
+\def\frontmatter{
+  \clearpage
+  \@mainmatterfalse
+  \pagenumbering{Roman}
+}
+\def\mainmatter{
+  \clearpage
+  \@mainmattertrue
+  \pagenumbering{arabic}
+}
+\def\backmatter{
+  \clearpage
+  \@mainmatterfalse
+  \settocdepth{chapter}
+  \hypersetup{bookmarksopenlevel=0}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Chinese title page.
+%    \begin{macrocode}
+%<*class-zh>
+\def\ITEC@zhtitlepage{
+  \begin{center}
+  \ifthenelse{\equal{\ITEC@reportno}{}}{
+    \null
+  }{
+    \begin{flushright}
+    {\Large \ttfamily No.~\ITEC@reportno}
+    \end{flushright}
+  }
+  \vskip 2cm
+  {\LARGE \ITEC@zhtitletitle}\\[0.5cm]
+  \rule{\linewidth}{0.5mm}\\[0.55cm]
+  {\LARGE \bfseries \sffamily \HEI \ITEC@zhtitle}\\[0.35cm]
+  \rule{\linewidth}{0.5mm}\\[3.5cm]
+  \begin{minipage}[t]{0.8\textwidth}
+  \TurnOffTabFontSetting
+  \Large
+  \setlength{\extrarowheight}{5pt}
+  \begin{tabular}{r@{：}l}
+    \parbox[t][][t]{6em}{\raggedleft \emph{\ITEC@zhauthortitle}} &
+    \parbox[t][][t]{15em}{\ITEC@zhauthor}
+    \ifthenelse{\equal{\ITEC@zhsupervisor}{}}{}{
+    \\
+    \parbox[t][][t]{6em}{\raggedleft \emph{\ITEC@zhsupervisortitle}} &
+    \parbox[t][][t]{15em}{\ITEC@zhsupervisor}
+    }
+  \end{tabular}
+  \TurnOnTabFontSetting
+  \end{minipage}
+  \vfill
+  {\Large \zhdateformat}
+  \end{center}
+}
+%</class-zh>
+%    \end{macrocode}
+%
+% English title page.
+%    \begin{macrocode}
+\def\ITEC@entitlepage{
+  \begin{center}
+  \ifthenelse{\equal{\ITEC@reportno}{}}{
+    \null
+  }{
+    \begin{flushright}
+    {\Large \ttfamily No.~\ITEC@reportno}
+    \end{flushright}
+  }
+  \vskip 1.5cm
+  {\Large \scshape \ITEC@entitletitle}\\[0.5cm]
+  \rule{\linewidth}{0.5mm}\\[0.55cm]
+  {\LARGE \bfseries \sffamily \ITEC@entitle}\\[0.35cm]
+  \rule{\linewidth}{0.5mm}\\[3.5cm]
+  \begin{minipage}[t]{0.8\textwidth}
+  \TurnOffTabFontSetting
+  \Large
+  \setlength{\extrarowheight}{5pt}
+  \begin{tabular}{r@{~:~}l}
+    \parbox[t][][t]{6em}{\raggedleft \emph{\ITEC@enauthortitle}} &
+    \parbox[t][][t]{15em}{\ITEC@enauthor}
+    \ifthenelse{\equal{\ITEC@ensupervisor}{}}{}{
+    \\
+    \parbox[t][][t]{6em}{\raggedleft \emph{\ITEC@ensupervisortitle}} &
+    \parbox[t][][t]{15em}{\ITEC@ensupervisor}
+    }
+  \end{tabular}
+  \TurnOnTabFontSetting
+  \end{minipage}
+  \vfill
+  {\Large \endateformat}
+  \end{center}
+}
+%    \end{macrocode}
+%
+% \begin{macro}{\maketitle,\makecover}
+% Commands to generate title page.
+%    \begin{macrocode}
+\def\maketitle{
+  \begingroup
+  \hypersetup{allcolors=black}
+  \let\ITEC@oldthepage\thepage
+%<class-zh>\def\thepage{封面}
+%<class-en>\def\thepage{Titlepage}
+  \begin{titlepage}
+%<*class-zh>
+    \thispagestyle{empty}
+    \ITEC@zhtitlepage
+    \clearpage
+%</class-zh>
+    \thispagestyle{empty}
+    \ITEC@entitlepage
+  \end{titlepage}
+  \let\thepage\ITEC@oldthepage
+  \setcounter{page}{1}
+  \endgroup
+}
+\let\makecover\maketitle
+%    \end{macrocode}
+% \end{macro}
+%
+% Chinese abstract page.
+%    \begin{macrocode}
+%<*class-zh>
+\def\ITEC@zhabstractpage{
+  \chapter*{\ITEC@zhabstractname}
+  \ITEC@zhabstract \par
+  \vskip 1.2ex
+  \noindent\hei{\ITEC@zhkeywordstitle}\hspace{.8em} \ITEC@zhkeywords
+}
+%</class-zh>
+%    \end{macrocode}
+%
+% English abstract page.
+%    \begin{macrocode}
+\def\ITEC@enabstractpage{
+  \chapter*{\ITEC@enabstractname}
+  \ITEC@enabstract \par
+  \vskip 1.2ex
+  \noindent\textbf{\ITEC@enkeywordstitle}\hspace{.8em} \ITEC@enkeywords
+}
+%    \end{macrocode}
+%
+% \begin{macro}{\makeabstract}
+% A command to generate abstract page.
+%    \begin{macrocode}
+\def\makeabstract{
+  \phantomsection
+%<*class-zh>
+  \addcontentsline{toc}{chapter}{\ITEC@zhabstractnamenospace}
+  \markboth{\ITEC@zhabstractnamenospace}{}
+  \ITEC@zhabstractpage
+  \clearpage
+%</class-zh>
+%<*class-en>
+  \addcontentsline{toc}{chapter}{\ITEC@enabstractname}
+  \markboth{\ITEC@enabstractname}{}
+%</class-en>
+  \ITEC@enabstractpage
+  \clearpage
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tableofcontents}
+% A command to generate table of contents.
+%    \begin{macrocode}
+\let\ITEC@tableofcontents\tableofcontents
+\def\tableofcontents{
+%<*class-zh>
+  \pdfbookmark{\contentsnamenospace}{\contentsnamenospace}
+  \markboth{\contentsnamenospace}{}
+%</class-zh>
+%<*class-en>
+  \pdfbookmark{\contentsname}{\contentsname}
+  \markboth{\contentsname}{}
+%</class-en>
+  \let\ITEC@oldmarkboth\markboth
+  \renewcommand\markboth[2]{}
+  \ITEC@tableofcontents
+  \let\markboth\ITEC@oldmarkboth
+  \clearpage
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{ack}
+% A command to generate acknowledge page.
+%    \begin{macrocode}
+\newenvironment{ack}{
+  \clearpage
+  \phantomsection
+%<*class-zh>
+  \addcontentsline{toc}{chapter}{\ITEC@acknamenospace}
+  \markboth{\ITEC@acknamenospace}{}
+%</class-zh>
+%<*class-en>
+  \addcontentsline{toc}{chapter}{\ITEC@ackname}
+  \markboth{\ITEC@ackname}{}
+%</class-en>
+  \chapter*{\ITEC@ackname}
+  \begingroup
+  \normalsize
+}{
+  \endgroup
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{publications}
+% A command to generate publications page.
+%    \begin{macrocode}
+\newenvironment{publications}{
+  \clearpage
+  \ifITEC@inappendix
+    \chapter{\ITEC@publicationtitle}
+    \markboth{\appendixname\,\thechapter\hspace{1em}\ITEC@publicationtitle}{}
+  \else
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\ITEC@publicationtitle}
+    \chapter*{\ITEC@publicationtitle}
+    \markboth{\ITEC@publicationtitle}{}
+  \fi
+  \begin{enumerate}[labelindent=0pt,label={[\arabic*]}]
+}{
+  \end{enumerate}
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\bibliography}
+% A command to generate bibliography page. We use \textsf{thuthesis-numeric.bst} in \href{http://mirrors.ctan.org/help/Catalogue/entries/thuthesis}{\texttt{thuthesis}} to typeset bibliography in Chinese version template. And use \href{http://mirrors.ctan.org/help/Catalogue/entries/ieeetran}{\texttt{IEEEtran}} in English version template.
+%    \begin{macrocode}
+%<*class-zh>
+\def\thudot{\unskip.}
+\def\thumasterbib{[Master Thesis]}
+\def\thuphdbib{[Doctor Thesis]}
+\bibliographystyle{thuthesis-numeric}
+%</class-zh>
+%<class-en>\bibliographystyle{IEEEtran}
+\let\ITEC@bibliography\bibliography
+\def\bibliography#1{
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\bibname}
+  \markboth{\bibname}{}
+%<class-zh>\ITEC@bibliography{#1}
+%<class-en>\ITEC@bibliography{IEEEabrv,#1}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{appendix}
+% The appendix environment.
+%    \begin{macrocode}
+\newif\ifITEC@inappendix
+\ITEC@inappendixfalse
+\newif\ifITEC@appendix@resetmainmatter
+\ITEC@appendix@resetmainmatterfalse
+\renewenvironment{appendix}{
+  \if@mainmatter
+    \ITEC@appendix@resetmainmatterfalse
+  \else
+    \ITEC@appendix@resetmainmattertrue
+    \@mainmattertrue
+  \fi
+  \appendixtitletocon
+  \appendices
+  \titleformat{\chapter}
+  {
+    \bfseries
+%<class-zh>\HEI
+    \centering
+    \fontsize{18pt}{21.6pt}\selectfont
+  }
+  {\appendixname\,\thechapter}
+  {1em}
+  {}
+  \ITEC@inappendixtrue
+}{
+  \endappendices
+  \ITEC@inappendixfalse
+  \ifITEC@appendix@resetmainmatter
+    \ITEC@appendix@resetmainmatterfalse
+    \@mainmatterfalse
+  \else\fi
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\listoffigures}
+% A command to generate list of figures.
+%    \begin{macrocode}
+\let\ITEC@listoffigures\listoffigures
+\def\listoffigures{
+  \clearpage
+  \ifITEC@inappendix
+    \addtocounter{chapter}{1}
+    \def\listfigurename{\appendixname\,\thechapter\hspace{1em}\ITEC@listfigurename}
+  \else
+    \def\listfigurename{\ITEC@listfigurename}
+  \fi
+  \phantomsection
+  \ifITEC@inappendix
+    \addcontentsline{toc}{chapter}{\thechapter\hspace{1em}\ITEC@listfigurename}
+  \else
+    \addcontentsline{toc}{chapter}{\listfigurename}
+  \fi
+  \markboth{\listfigurename}{}
+  \let\ITEC@oldmarkboth\markboth
+  \renewcommand\markboth[2]{}
+  \ITEC@listoffigures
+  \let\markboth\ITEC@oldmarkboth
+  \def\listfigurename{\ITEC@listfigurename}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\listoftables}
+% A command to generate list of tables.
+%    \begin{macrocode}
+\let\ITEC@listoftables\listoftables
+\def\listoftables{
+  \clearpage
+  \ifITEC@inappendix
+    \addtocounter{chapter}{1}
+    \def\listtablename{\appendixname\,\thechapter\hspace{1em}\ITEC@listtablename}
+  \else
+    \def\listtablename{\ITEC@listtablename}
+  \fi
+  \phantomsection
+  \ifITEC@inappendix
+    \addcontentsline{toc}{chapter}{\thechapter\hspace{1em}\ITEC@listtablename}
+  \else
+    \addcontentsline{toc}{chapter}{\listtablename}
+  \fi
+  \markboth{\listtablename}{}
+  \let\ITEC@oldmarkboth\markboth
+  \renewcommand\markboth[2]{}
+  \ITEC@listoftables
+  \let\markboth\ITEC@oldmarkboth
+  \def\listtablename{\ITEC@listtablename}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Other Command}
+% \begin{macro}{\email}
+%    \begin{macrocode}
+\def\email#1{
+  \href{mailto:#1}{\texttt{#1}}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+%</class>
+%    \end{macrocode}
+%
+% \endgroup
+% \Finale
+%
+% ^^A Other files
+% \iffalse
+%
+%<*example-zh|example-en>
+%<example-zh>\documentclass{itecreport-zh}
+%<example-en>\documentclass{itecreport-en}
+
+\reportno{12345}
+%<example-zh>\title{\LaTeX 模板使用示例}{An Example of Using itecreport-zh \LaTeX{} Template}
+%<example-en>\title{An Example of Using itecreport-en \LaTeX{} Template}
+\author
+%<example-zh>{许铖}
+{Xu Cheng}
+\supervisor
+%<example-zh>{黑晓军\hspace{1em}副教授}
+{Ass. Prof. Xiaojun Hei}
+\date{2013}{6}{1}
+
+%<*example-zh>
+\zhabstract{
+    这是一个\LaTeX{}模板使用示例文件。该模板用于华中科技大学电子与信息工程系湖北省智能互联网技术重点实验室技术报告写作。
+
+    该模板基于LPPL v1.3发行。
+
+}
+\zhkeywords{\LaTeX{}，华中科技大学，模板}
+%</example-zh>
+
+%<example-zh>\enabstract
+%<example-en>\abstract
+{
+    This is a \LaTeX{} template example file. This template is used in written technical report for Internet Technology and Engineering R\&D Center of Huazhong Univ. of Sci. \& Tech.
+
+    This template is published under LPPL v1.3 License.
+
+}
+%<example-zh>\enkeywords
+%<example-en>\keywords
+{\LaTeX{}, Huazhong Univ. of Sci. \& Tech., Template}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\makeabstract
+\tableofcontents
+\listoffigures
+\listoftables
+\mainmatter
+
+%<*example-zh>
+\chapter{基本格式测试}\label{chapter:1}
+
+\section{第一层}\label{sec:1}
+\subsection{第二层}\label{sec:2}
+\subsubsection{第三层}\label{sec:3}
+测试测试测试测试测试测试测试测试测试测试测试测试。
+\footnote{\label{footnote:1}脚注}
+
+\section{字体}
+
+普通\textbf{粗体}\emph{斜体}
+
+\hei{黑体}\kai{楷体}\fangsong{仿宋}
+
+\section{公式}
+
+单个公式，公式引用：\autoref{eq:1}。
+\begin{equation}
+ c^2 = a^2 + b^2 \label{eq:1}
+\end{equation}
+
+多个公式，公式引用：\autoref{eq:2}，\autoref{eq:3}。
+
+\begin{subequations}
+\begin{equation}
+  F = ma \label{eq:2}
+\end{equation}
+\begin{equation}
+  E = mc^2 \label{eq:3}
+\end{equation}
+\end{subequations}
+
+\section{罗列环境}
+
+\begin{enumerate}
+    \item 第一层\label{item:1}
+    \item 第一层
+    \begin{enumerate}
+        \item 第二层\label{item:2}
+        \item 第二层
+        \begin{enumerate}
+            \item 第三层\label{item:3}
+            \item 第三层
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+\begin{description}
+    \item[解释环境]  解释内容
+\end{description}
+
+\chapter{其他格式测试}
+
+\section{代码环境}
+
+\begin{lstlisting}[language=python]
+import os
+
+def main():
+    '''
+    doc here
+    '''
+    print 'hello, world' # Abc
+    print 'hello, 中文' # 中文
+\end{lstlisting}
+
+\section{定律证明环境}
+
+\begin{definition}\label{def:1}
+这是一个定义。
+\end{definition}
+\begin{proposition}\label{proposition:1}
+这是一个命题。
+\end{proposition}
+\begin{axiom}\label{axiom:1}
+这是一个公理。
+\end{axiom}
+\begin{lemma}\label{lemma:1}
+这是一个引理。
+\end{lemma}
+\begin{theorem}\label{theorem:1}
+这是一个定理。
+\end{theorem}
+\begin{proof}\label{proof:1}
+这是一个证明。
+\end{proof}
+
+\section{算法环境}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwData{this text}
+\KwResult{how to write algorithm with \LaTeX2e }
+initialization\;\label{alg_line:1}
+\While{not at end of this document}{
+read current\;
+\eIf{understand}{
+go to next section\;
+current section becomes this one\;
+}{
+go back to the beginning of current section\;
+}
+}
+\caption{How to write algorithms}\label{alg:1}
+\end{algorithm}
+
+\section{表格}
+表格见\autoref{tab:1}。
+
+\begin{table}[!h]
+\centering
+\caption{一个表格}\label{tab:1}
+\begin{tabular}{|c|c|}
+\hline
+a & b \\
+\hline
+c & d \\
+\hline
+\end{tabular}
+\end{table}
+\section{图片}
+图片见\autoref{fig:1}。图片格式支持eps，png，pdf等。多个图片见\autoref{fig:2}，分开引用：\autoref{fig:2-1}，\autoref{fig:2-2}。
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=.4\textwidth]{fig-example.pdf}
+\caption{一个图片}\label{fig:1}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+  \begin{subfigure}[b]{0.3\textwidth}
+  \includegraphics[width=\textwidth]{fig-example.pdf}
+  \caption{图片1}\label{fig:2-1}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+  \includegraphics[width=\textwidth]{fig-example.pdf}
+  \caption{图片2}\label{fig:2-2}
+  \end{subfigure}
+\caption{多个图片}\label{fig:2}
+\end{figure}
+
+\section{参考文献示例}
+这是一篇中文参考文献\cite{TEXGURU99}；这是一篇英文参考文献\cite{knuth}；同时引用\cite{TEXGURU99,knuth}。
+
+\section[\textbackslash{}autoref 测试]{\texttt{\textbackslash{}autoref} 测试}
+
+\begin{description}
+  \item[公式] \autoref{eq:1}
+  \item[脚注] \autoref{footnote:1}
+  \item[项] \autoref{item:1},\autoref{item:2},\autoref{item:3}
+  \item[图] \autoref{fig:1}
+  \item[表] \autoref{tab:1}
+  \item[附录] \autoref{appendix:1}
+  \item[章] \autoref{chapter:1}
+  \item[小节] \autoref{sec:1},\autoref{sec:2},\autoref{sec:3}
+  \item[算法] \autoref{alg:1},\autoref{alg_line:1}
+  \item[证明环境] \autoref{def:1},\autoref{proposition:1},\autoref{axiom:1},\autoref{lemma:1},\autoref{theorem:1},\autoref{proof:1}
+\end{description}
+
+
+\backmatter
+
+\begin{ack}
+致谢正文。
+\end{ack}
+
+\bibliography{ref-example}
+
+\appendix
+
+\begin{publications}
+    \item 论文1
+    \item 论文2
+\end{publications}
+
+\chapter{这是一个附录}\label{appendix:1}
+附录正文。
+
+%</example-zh>
+%<*example-en>
+\chapter{Simple Test}\label{chapter:1}
+
+\section{Level 1}\label{sec:1}
+\subsection{Level 2}\label{sec:2}
+\subsubsection{Level 3}\label{sec:3}
+Content
+\footnote{\label{footnote:1}A footnote.}
+
+\section{Font}
+
+Normal \textbf{Bold} \emph{Italic} \textsf{Sans}
+
+The quick brown fox jumps over the lazy dog.
+
+\section{Equation}
+
+Single equation, see \autoref{eq:1}.
+\begin{equation}
+  c^2 = a^2 + b^2 \label{eq:1}
+\end{equation}
+
+Multi-equations, see \autoref{eq:2} and \autoref{eq:3}.
+
+\begin{subequations}
+\begin{equation}
+  F = ma \label{eq:2}
+\end{equation}
+\begin{equation}
+  E = mc^2 \label{eq:3}
+\end{equation}
+\end{subequations}
+
+\section{List Environment}
+
+\begin{enumerate}
+    \item Level 1\label{item:1}
+    \item Level 1
+    \begin{enumerate}
+        \item Level 2\label{item:2}
+        \item Level 2
+        \begin{enumerate}
+            \item Level 3\label{item:3}
+            \item Level 3
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+\begin{description}
+    \item[Discription]  Content
+\end{description}
+
+\chapter{Other Test}
+
+\section{Code Highlight}
+
+\begin{lstlisting}[language=python]
+import os
+
+def main():
+    '''
+    doc here
+    '''
+    print 'hello, world' # Abc
+\end{lstlisting}
+
+\section{Theorem}
+
+\begin{definition}\label{def:1}
+This is a definition.
+\end{definition}
+\begin{proposition}\label{proposition:1}
+This is a proposition.
+\end{proposition}
+\begin{axiom}\label{axiom:1}
+This is an axiom.
+\end{axiom}
+\begin{lemma}\label{lemma:1}
+This is a lemma.
+\end{lemma}
+\begin{theorem}\label{theorem:1}
+This is a theorem.
+\end{theorem}
+\begin{proof}\label{proof:1}
+This is a proof.
+\end{proof}
+
+\section{Algorithm}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwData{this text}
+\KwResult{how to write algorithm with \LaTeX2e }
+initialization\;\label{alg_line:1}
+\While{not at end of this document}{
+read current\;
+\eIf{understand}{
+go to next section\;
+current section becomes this one\;
+}{
+go back to the beginning of current section\;
+}
+}
+\caption{How to write algorithms}\label{alg:1}
+\end{algorithm}
+
+\section{Table}
+See \autoref{tab:1}.
+
+\begin{table}[!h]
+\centering
+\caption{A table}\label{tab:1}
+\begin{tabular}{|c|c|}
+\hline
+a & b \\
+\hline
+c & d \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Figure}
+See \autoref{fig:1}.Figure supports format in eps, png, pdf and so on. Multi-figures, see \autoref{fig:2}. Reference separately: \autoref{fig:2-1}, \autoref{fig:2-2}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=.4\textwidth]{fig-example.pdf}
+\caption{A figure}\label{fig:1}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+  \begin{subfigure}[b]{0.3\textwidth}
+  \includegraphics[width=\textwidth]{fig-example.pdf}
+  \caption{Figure A}\label{fig:2-1}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+  \includegraphics[width=\textwidth]{fig-example.pdf}
+  \caption{Figure B}\label{fig:2-2}
+  \end{subfigure}
+\caption{Multi-figures}\label{fig:2}
+\end{figure}
+
+\section{Bibliography}
+Cite one bib\cite{knuth}, cite two\cite{TEXGURU99,knuth}.
+
+\section[\textbackslash{}autoref Test]{\texttt{\textbackslash{}autoref} Test}
+
+\begin{description}
+  \item[Equation] \autoref{eq:1}
+  \item[Footnote] \autoref{footnote:1}
+  \item[Item] \autoref{item:1},\autoref{item:2},\autoref{item:3}
+  \item[Figure] \autoref{fig:1}
+  \item[Table] \autoref{tab:1}
+  \item[Appendix] \autoref{appendix:1}
+  \item[Chapter] \autoref{chapter:1}
+  \item[Section] \autoref{sec:1},\autoref{sec:2},\autoref{sec:3}
+  \item[Algorithm] \autoref{alg:1},\autoref{alg_line:1}
+  \item[Theorem] \autoref{def:1},\autoref{proposition:1},\autoref{axiom:1},\autoref{lemma:1},\autoref{theorem:1},\autoref{proof:1}
+\end{description}
+
+\backmatter
+
+\begin{ack}
+Acknowledge
+\end{ack}
+
+\bibliography{ref-example}
+
+\appendix
+
+\begin{publications}
+    \item Thesis 1
+    \item Thesis 2
+\end{publications}
+
+\chapter{This is an appendix}\label{appendix:1}
+Content.
+
+%</example-en>
+
+\end{document}
+%</example-zh|example-en>
+%
+%<*example-bib>
+@BOOK{TEXGURU99,
+  AUTHOR        = "{\TeX}Guru",
+  TITLE         = "{\LaTeXe} Manual",
+  YEAR          = "1999"
+}
+
+@BOOK{knuth,
+  AUTHOR        = "{Donald E. Knuth}",
+  TITLE         = "The \TeX{}book",
+  publisher     = "Addison–Wesley Pub. Co.",
+  address       = "MA",
+  YEAR          = "1984"
+}
+%</example-bib>
+%
+%<*readme>
+%<<READMEFILE
+itecreport
+==========
+
+An Unofficial Technical Report Template in LaTeX for [the Internet Technology and Engineering R&D Center](http://itec.hust.edu.cn/). This template is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+This template provides two class files which correspond to Chinese version and English version template separately: `itecreport-zh` and `itecreport-en`.
+
+If these templates are useful for you, you might want to buy me a cup of coffee to keep me fresh. Thanks! :)
+
+[![Buy me a cup of coffee via PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=xucheng@me.com&lc=US&item_name=Donate%20this%20project&item_number=itecreport&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHostedGuest)
+
+## Requirement
+
+* Install the latest version of [Texlive](http://www.tug.org/texlive/)(Recommend) or [MiKTex](http://miktex.org/). Please ensure that all the packages are up-to-date.
+* Install following Chinese fonts if you use Chinese version template (`itecreport-zh`):
+    * `AdobeSongStd-Light`
+    * `AdobeKaitiStd-Regular`
+    * `AdobeHeitiStd-Regular`
+    * `AdobeFangsongStd-Regular`
+
+## Installation
+
+### Install into local
+
+Use the command below to install this template into local.
+```
+make install
+```
+If you need uninstall it, use the command below.
+```
+make uninstall
+```
+
+For Windows User who don't install `Make`, use the command below to install.
+```
+makewin32.bat install
+```
+If you need uninstall it, use the command below.
+```
+makewin32.bat uninstall
+```
+Although `makewin32.bat` behaves much like `Makefile`, I still recommend you install `Make` into your Windows. You can download it from [here](http://gnuwin32.sourceforge.net/packages/make.htm).
+
+### Use without installation
+
+If you want to use this template temporary rather than installing it into local for long term use. Run below command to unpack the package.
+```
+make unpack
+```
+For Windows User who don't install `Make`, use the command below to unpack the package.
+```
+makewin32.bat unpack
+```
+Then copy the file `itecreport-zh.cls` and `itecreport-en.cls` from directory `itecreport` into your TeX project root directory.
+
+## Usage
+
+**Important : This template can only be compiled by XeLaTeX or LuaLaTeX[Recommend].**
+
+* Manual: See [itecreport.pdf](https://github.com/xu-cheng/itecreport/raw/master/itecreport/itecreport.pdf).
+* Example: See [itecreport-zh-example.pdf](https://github.com/xu-cheng/itecreport/raw/master/itecreport/itecreport-zh-example.pdf) and [itecreport-en-example.pdf](https://github.com/xu-cheng/itecreport/raw/master/itecreport/itecreport-en-example.pdf).
+
+## License
+
+LPPL v1.3 is chosen to be the license of the project. Use as you desire.
+
+```
+Copyright (C) 2013 by Xu Cheng <xucheng@me.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License, either version 1.3
+of this license or (at your option) any later version.
+The latest version of this license is in
+  http://www.latex-project.org/lppl.txt
+and version 1.3 or later is part of all distributions of LaTeX
+version 2005/12/01 or later.
+
+This work has the LPPL maintenance status `maintained'.
+
+The Current Maintainer of this work is Xu Cheng.
+
+This work consists of the files itecreport.dtx and itecreport.ins
+and the derived file itecreport-zh.cls, itecreport-en.cls and
+along with its documnet and example files.
+```
+%READMEFILE
+%<\readme>
+%
+% \fi
+%
+\endinput
