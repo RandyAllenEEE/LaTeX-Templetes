@@ -1,0 +1,777 @@
+%% HUST-SEEE Beamer theme
+%% Visual style matched to 0_PPT Template.pptx.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hustseee}[2026/06/27 HUST-SEEE Beamer theme]
+
+\RequirePackage{iftex}
+\RequirePackage{booktabs}
+\RequirePackage{graphicx}
+\RequirePackage[noamssymbols]{newtxmath}
+\RequirePackage{tikz}
+\RequirePackage{varwidth}
+\RequirePackage{xcolor}
+\RequirePackage{listings}
+\@ifpackageloaded{biblatex}{}{\RequirePackage[backend=biber,style=ieee,sorting=none,defernumbers=true]{biblatex}}
+\newcommand{\HUSTAddBibResource}[1]{\addbibresource{#1}}
+\let\HUSTInlineCite\cite
+\DeclareCiteCommand{\HUSTSuperscriptCite}[\mkbibsuperscript]
+  {\bibopenbracket\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \ifnumgreater{\value{citecount}}{1}{\bibopenbracket}{}%
+   \usebibmacro{cite}}
+  {\bibclosebracket\multicitedelim}
+  {\usebibmacro{postnote}%
+   \bibclosebracket}
+\newcommand{\HUSTUseInlineCites}{\let\cite\HUSTInlineCite}
+\newcommand{\HUSTUseSuperscriptCites}{\let\cite\HUSTSuperscriptCite}
+\newenvironment{HUSTInlineCitations}{\begingroup\HUSTUseInlineCites}{\endgroup}
+\let\HUSTCite\HUSTSuperscriptCite
+\let\uppercite\HUSTSuperscriptCite
+
+\mode<presentation>
+
+\newlength{\HUST@paperwidth}
+\newlength{\HUST@paperheight}
+\setlength{\HUST@paperheight}{7.5in}
+\pgfmathsetlength{\HUST@paperwidth}{\strip@pt\paperwidth/\strip@pt\paperheight*7.5in}
+\geometry{paperwidth=\HUST@paperwidth,paperheight=\HUST@paperheight}
+
+\definecolor{HUSTBlue}{RGB}{51,51,153}
+\definecolor{HUSTDarkBlue}{RGB}{0,0,102}
+\definecolor{HUSTAgendaLeft}{RGB}{197,236,255}
+\definecolor{HUSTAgendaRight}{RGB}{254,253,243}
+\definecolor{HUSTCircleBlue}{RGB}{51,153,255}
+\definecolor{HUSTReferenceGray}{RGB}{127,127,127}
+\definecolor{HUSTCodeBackground}{RGB}{247,249,255}
+\definecolor{HUSTCodeRule}{RGB}{205,218,238}
+\definecolor{HUSTCodeKeyword}{RGB}{0,0,153}
+\definecolor{HUSTCodeComment}{RGB}{80,120,80}
+\definecolor{HUSTCodeString}{RGB}{153,51,51}
+\definecolor{HUSTKeyPointBackground}{RGB}{239,243,255}
+\definecolor{HUSTAlertRed}{RGB}{184,68,55}
+\definecolor{HUSTAlertBackground}{RGB}{255,243,239}
+\definecolor{HUSTConclusionGreen}{RGB}{46,122,86}
+\definecolor{HUSTConclusionBackground}{RGB}{239,249,244}
+
+\newcommand{\HUSTSerifFont}{\songti}
+\newcommand{\HUSTHeiFont}{\heiti}
+\newcommand{\HUSTLatinFont}{\rmfamily}
+\newcommand{\HUSTRefCJKFont}{\sffamily}
+\newcommand{\HUSTRefLatinFont}{\sffamily}
+\newcommand{\HUST@fontpath}{res/fonts/}
+\newcommand{\HUST@figpath}{res/figs/}
+\newcommand{\HUSTLogoPath}{res/figs/标准彩色校徽文件.png}
+\newcommand{\HUSTSetLogo}[1]{\renewcommand{\HUSTLogoPath}{#1}}
+
+\ifXeTeX
+  \newcommand{\HUST@setseriffont}[1]{%
+    \setCJKfamilyfont{hustserif}[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
+    \renewcommand{\HUSTSerifFont}{\CJKfamily{hustserif}}%
+  }
+  \newcommand{\HUST@setheifont}[1]{%
+    \setCJKfamilyfont{husthei}[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
+    \renewcommand{\HUSTHeiFont}{\CJKfamily{husthei}}%
+  }
+  \newcommand{\HUST@setrefcjkfont}[1]{%
+    \setCJKfamilyfont{hustrefcjk}[Path=\HUST@fontpath,AutoFakeBold=1.4]{#1}%
+    \renewcommand{\HUSTRefCJKFont}{\CJKfamily{hustrefcjk}}%
+  }
+  \newcommand{\HUST@setreflatinfontfile}[1]{%
+    \newfontfamily\HUST@RefLatinFont[Path=\HUST@fontpath,Ligatures=TeX]{#1}%
+    \renewcommand{\HUSTRefLatinFont}{\HUST@RefLatinFont}%
+  }
+  \newcommand{\HUST@setreflatinfontname}[1]{%
+    \newfontfamily\HUST@RefLatinFont[Ligatures=TeX]{#1}%
+    \renewcommand{\HUSTRefLatinFont}{\HUST@RefLatinFont}%
+  }
+  \IfFileExists{res/fonts/times.ttf}{%
+    \setmainfont[Path=\HUST@fontpath,AutoFakeBold=2.2,AutoFakeSlant=.2]{times.ttf}%
+    \newfontfamily\HUST@LatinFont[Path=\HUST@fontpath,Ligatures=TeX,AutoFakeBold=2.2,AutoFakeSlant=.2]{times.ttf}%
+    \renewcommand{\HUSTLatinFont}{\HUST@LatinFont}%
+  }{%
+    \IfFileExists{res/fonts/TimesNewRoman.ttf}{%
+      \setmainfont[Path=\HUST@fontpath,AutoFakeBold=2.2,AutoFakeSlant=.2]{TimesNewRoman.ttf}%
+      \newfontfamily\HUST@LatinFont[Path=\HUST@fontpath,Ligatures=TeX,AutoFakeBold=2.2,AutoFakeSlant=.2]{TimesNewRoman.ttf}%
+      \renewcommand{\HUSTLatinFont}{\HUST@LatinFont}%
+    }{}%
+  }
+  \IfFileExists{res/fonts/STZhongsong.ttf}{\HUST@setseriffont{STZhongsong.ttf}}{%
+    \IfFileExists{res/fonts/STZHONGS.TTF}{\HUST@setseriffont{STZHONGS.TTF}}{}%
+  }
+  \IfFileExists{res/fonts/SimHei.ttf}{\HUST@setheifont{SimHei.ttf}}{%
+    \IfFileExists{res/fonts/simhei.ttf}{\HUST@setheifont{simhei.ttf}}{%
+      \IfFileExists{res/fonts/Yahei.ttf}{\HUST@setheifont{Yahei.ttf}}{%
+        \IfFileExists{res/fonts/msyh.ttf}{\HUST@setheifont{msyh.ttf}}{%
+          \IfFileExists{res/fonts/msyh.ttc}{\HUST@setheifont{msyh.ttc}}{}%
+        }%
+      }%
+    }%
+  }
+  \IfFileExists{res/fonts/msyh.ttf}{\HUST@setrefcjkfont{msyh.ttf}}{%
+    \IfFileExists{res/fonts/msyh.ttc}{\HUST@setrefcjkfont{msyh.ttc}}{%
+      \IfFileExists{res/fonts/Yahei.ttf}{\HUST@setrefcjkfont{Yahei.ttf}}{}%
+    }%
+  }
+  \IfFileExists{res/fonts/Arial.ttf}{\HUST@setreflatinfontfile{Arial.ttf}}{%
+    \IfFileExists{res/fonts/arial.ttf}{\HUST@setreflatinfontfile{arial.ttf}}{%
+      \@ifundefined{IfFontExistsTF}{}{\IfFontExistsTF{Arial}{\HUST@setreflatinfontname{Arial}}{}}%
+    }%
+  }
+\fi
+
+\lstdefinestyle{HUSTCode}{%
+  backgroundcolor=\color{HUSTCodeBackground},
+  basicstyle=\ttfamily\fontsize{22}{26}\selectfont,
+  keywordstyle=\color{HUSTCodeKeyword}\bfseries,
+  commentstyle=\color{HUSTCodeComment}\itshape,
+  stringstyle=\color{HUSTCodeString},
+  numberstyle=\fontsize{22}{26}\selectfont\color{HUSTReferenceGray},
+  numbers=none,
+  numbersep=7pt,
+  frame=single,
+  rulecolor=\color{HUSTCodeRule},
+  framerule=.55pt,
+  framesep=5pt,
+  xleftmargin=1.3em,
+  xrightmargin=.4em,
+  tabsize=2,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b
+}
+
+\lstdefinestyle{HUSTAlgorithm}{%
+  style=HUSTCode,
+  basicstyle=\ttfamily\fontsize{22}{26}\selectfont,
+  morekeywords={Input,Output,Initialize,for,while,if,else,end,return,do,then,to},
+  keywordstyle=\color{HUSTCodeKeyword}\bfseries,
+  numbers=none
+}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{structure}{fg=HUSTBlue}
+\setbeamercolor{frametitle}{fg=HUSTBlue,bg=white}
+\setbeamercolor{title}{fg=HUSTBlue,bg=white}
+\setbeamercolor{author}{fg=HUSTBlue,bg=white}
+\setbeamercolor{institute}{fg=HUSTBlue,bg=white}
+\setbeamercolor{date}{fg=HUSTBlue,bg=white}
+\setbeamercolor{footline}{fg=white,bg=HUSTBlue}
+\setbeamercolor{caption name}{fg=HUSTBlue}
+\setbeamercolor{caption}{fg=black}
+\setbeamercolor{block title}{fg=HUSTBlue,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamercolor{block title example}{fg=HUSTBlue,bg=white}
+\setbeamercolor{block body example}{fg=black,bg=white}
+\setbeamercolor{HUST frame reference}{fg=HUSTReferenceGray,bg=white}
+\setbeamercolor{HUST page reference}{fg=black,bg=white}
+
+\setbeamerfont{title}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{52}{60}\selectfont,series=\bfseries}
+\setbeamerfont{author}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{36}{44}\selectfont,series=\bfseries}
+\setbeamerfont{institute}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{28}{34}\selectfont,series=\bfseries}
+\setbeamerfont{date}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{28}{34}\selectfont,series=\bfseries}
+\setbeamerfont{normal text}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{30}\selectfont}
+\setbeamerfont{frametitle}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{36}{44}\selectfont,series=\bfseries}
+\setbeamerfont{footline}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{26}\selectfont}
+\setbeamerfont{itemize/enumerate body}{size=\fontsize{28}{39}\selectfont}
+\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{24}{34}\selectfont}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{22}{30}\selectfont}
+\setbeamerfont{caption name}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{27}\selectfont,series=\bfseries}
+\setbeamerfont{caption}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{27}\selectfont}
+\setbeamerfont{block title}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{24}{29}\selectfont,series=\bfseries}
+\setbeamerfont{block body}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{30}\selectfont}
+\setbeamerfont{block title example}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{26}{31}\selectfont,series=\bfseries}
+\setbeamerfont{block body example}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{30}\selectfont}
+\setbeamerfont{HUST reference body}{family=\HUSTRefLatinFont\HUSTRefCJKFont,size=\fontsize{11}{13}\selectfont}
+
+\newcommand{\HUSTRequirementHeading}[1]{%
+  {\HUSTLatinFont\HUSTHeiFont\bfseries\color{HUSTBlue}\fontsize{32}{38}\selectfont #1}%
+}
+\newcommand{\HUSTContentHeading}[1]{%
+  {\HUSTLatinFont\HUSTHeiFont\bfseries\color{HUSTBlue}\fontsize{26}{31}\selectfont #1}%
+}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{caption}[numbered]
+\setbeamersize{text margin left=.0525\paperwidth,text margin right=.04125\paperwidth}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+\newlength{\HUST@titlebarheight}
+\newlength{\HUST@titlebarmaxwidth}
+\newlength{\HUST@titlebarcenter}
+\newlength{\HUST@titlebarmincenter}
+\newlength{\HUST@titleauthorblocktop}
+\newlength{\HUST@titlelogowidth}
+\newlength{\HUST@titlelogoheight}
+\newlength{\HUST@bodylogowidth}
+\newlength{\HUST@bodylogoheight}
+\newlength{\HUST@headerlinestart}
+\newlength{\HUST@headerlineend}
+\newlength{\HUST@frametitlewidth}
+\newlength{\HUST@frametitlecenterx}
+\newlength{\HUST@frametitleheight}
+\newlength{\HUST@frametitlevskip}
+\newlength{\HUST@footlineheight}
+\newlength{\HUST@footlinetitlewidth}
+\newlength{\HUST@footlinetitleheight}
+\newlength{\HUST@referencewidth}
+\newlength{\HUST@requirementleftskip}
+\newlength{\HUST@requirementrightskip}
+\newcounter{HUST@framebibitem}
+\newcounter{HUST@framebibmax}
+\newcommand{\HUST@referencefont}{\usebeamerfont{HUST reference body}}
+\newcommand{\HUST@framereffontsize}{11}
+\newcommand{\HUST@framerefbaselineskip}{13}
+\newcommand{\HUST@framerefmaxitems}{0}
+\newcommand{\HUST@framerefbeforeskip}{.02in}
+\newcommand{\HUST@framerefafterskip}{-1.20in}
+\newif\ifHUST@framerefbottom
+\newcommand{\HUST@requirementdefaultfontsize}{28}
+\newcommand{\HUST@requirementdefaultbaselineskip}{39}
+\newcommand{\HUST@requirementdefaultleft}{.08625\paperwidth}
+\newcommand{\HUST@requirementdefaultright}{.0525\paperwidth}
+\newcommand{\HUST@requirementdefaulttop}{.08in}
+\newcommand{\HUST@requirementfontsize}{28}
+\newcommand{\HUST@requirementbaselineskip}{39}
+\newcommand{\HUST@requirementtopskip}{.08in}
+\newcommand{\HUST@contentdefaultfontsize}{22}
+\newcommand{\HUST@contentdefaultbaselineskip}{30}
+\newcommand{\HUST@contentdefaulttop}{-.02in}
+\newcommand{\HUST@contentfontsize}{22}
+\newcommand{\HUST@contentbaselineskip}{30}
+\newcommand{\HUST@contenttopskip}{-.02in}
+\newlength{\HUST@tocleftlen}
+\newlength{\HUST@tocrightlen}
+\newlength{\HUST@tocrowtoplen}
+\newlength{\HUST@tocheightlen}
+\newlength{\HUST@tocbottomlen}
+\newlength{\HUST@tocradiuslen}
+\newlength{\HUST@toccenterxlen}
+\newlength{\HUST@toccenterylen}
+\newlength{\HUST@toctextxlen}
+\newlength{\HUST@tocinnerradiuslen}
+\newlength{\HUST@toctextwidthlen}
+\newsavebox{\HUST@frametitlebox}
+\newsavebox{\HUST@footlinetitlebox}
+\newsavebox{\HUST@titlebarbox}
+\newcommand{\HUST@measurebodylayout}{%
+  \setlength{\HUST@bodylogowidth}{.125\paperwidth}%
+  \setlength{\HUST@bodylogoheight}{.169\paperheight}%
+  \ifdim\HUST@bodylogowidth>.155\paperheight\relax
+    \setlength{\HUST@bodylogowidth}{.155\paperheight}%
+  \fi
+  \setlength{\HUST@headerlinestart}{\dimexpr.04335\paperwidth+\HUST@bodylogowidth+.045\paperwidth\relax}%
+  \setlength{\HUST@headerlineend}{.98055\paperwidth}%
+  \setlength{\HUST@frametitlewidth}{\dimexpr\HUST@headerlineend-\HUST@headerlinestart-.040\paperwidth\relax}%
+  \ifdim\HUST@frametitlewidth<.52\paperwidth\relax
+    \setlength{\HUST@frametitlewidth}{.52\paperwidth}%
+  \fi
+  \setlength{\HUST@frametitlecenterx}{\dimexpr\HUST@headerlinestart+\HUST@frametitlewidth/2\relax}%
+}
+\newcommand{\HUST@measureframetitle}{%
+  \HUST@measurebodylayout%
+  \sbox{\HUST@frametitlebox}{%
+    \begin{minipage}{\HUST@frametitlewidth}%
+      \centering\usebeamerfont{frametitle}\insertframetitle%
+    \end{minipage}%
+  }%
+  \setlength{\HUST@frametitleheight}{\dimexpr\ht\HUST@frametitlebox+\dp\HUST@frametitlebox\relax}%
+  \setlength{\HUST@frametitlevskip}{.1933\paperheight}%
+  \ifdim\HUST@frametitlevskip<\dimexpr.035\paperheight+\HUST@frametitleheight+.060\paperheight\relax
+    \setlength{\HUST@frametitlevskip}{\dimexpr.035\paperheight+\HUST@frametitleheight+.060\paperheight\relax}%
+  \fi
+}
+\newcommand{\HUST@measurefootline}{%
+  \setlength{\HUST@footlinetitlewidth}{.74\paperwidth}%
+  \sbox{\HUST@footlinetitlebox}{%
+    \begin{minipage}{\HUST@footlinetitlewidth}%
+      \centering\usebeamerfont{footline}\insertshorttitle%
+    \end{minipage}%
+  }%
+  \setlength{\HUST@footlinetitleheight}{\dimexpr\ht\HUST@footlinetitlebox+\dp\HUST@footlinetitlebox\relax}%
+  \setlength{\HUST@footlineheight}{\dimexpr\HUST@footlinetitleheight+.155in\relax}%
+  \ifdim\HUST@footlineheight<.438in\relax
+    \setlength{\HUST@footlineheight}{.438in}%
+  \fi
+}
+\newcommand{\HUST@measuretitlebar}{%
+  \setlength{\HUST@titlebarmaxwidth}{.86\paperwidth}%
+  \sbox{\HUST@titlebarbox}{%
+    \begin{varwidth}{\HUST@titlebarmaxwidth}%
+      \centering\usebeamerfont{title}\inserttitle%
+    \end{varwidth}%
+  }%
+  \setlength{\HUST@titlebarheight}{\dimexpr\ht\HUST@titlebarbox+\dp\HUST@titlebarbox\relax}%
+  \setlength{\HUST@titlebarheight}{\dimexpr\HUST@titlebarheight+\HUST@titlebarheight/5+\HUST@titlebarheight/10\relax}%
+}
+\newcommand{\HUST@measuretitlelayout}{%
+  \HUST@measuretitlebar%
+  \setlength{\HUST@titlelogowidth}{1.065\paperwidth}%
+  \setlength{\HUST@titlelogoheight}{.180\paperheight}%
+  \setlength{\HUST@titlebarcenter}{.376\paperheight}%
+  \setlength{\HUST@titlebarmincenter}{\dimexpr.265\paperheight+\HUST@titlebarheight/2\relax}%
+  \ifdim\HUST@titlebarcenter<\HUST@titlebarmincenter\relax
+    \setlength{\HUST@titlebarcenter}{\HUST@titlebarmincenter}%
+  \fi
+  \setlength{\HUST@titleauthorblocktop}{\dimexpr\HUST@titlebarcenter+\HUST@titlebarheight/2+.060\paperheight\relax}%
+}
+
+\newcommand{\HUST@topdecorations}{%
+  \HUST@measurebodylayout%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north west,inner sep=0pt]
+      at ([xshift=.04335\paperwidth,yshift=-.0008\paperheight]current page.north west)
+      {\includegraphics[width=\HUST@bodylogowidth,height=\HUST@bodylogoheight,keepaspectratio]{\HUSTLogoPath}};
+    \draw[HUSTDarkBlue,line width=5pt]
+      ([xshift=\HUST@headerlinestart,yshift=-.13333\paperheight]current page.north west)
+      -- ([xshift=\HUST@headerlineend,yshift=-.13333\paperheight]current page.north west);
+  \end{tikzpicture}%
+}
+
+\setbeamertemplate{background}{\HUST@topdecorations}
+
+\setbeamertemplate{footline}{%
+  \HUST@measurefootline%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=\HUST@footlineheight,dp=0pt]{footline}%
+      \usebeamerfont{footline}%
+      \vbox to \HUST@footlineheight{%
+        \vfil%
+        \hbox to \paperwidth{%
+          \hfill%
+          \begin{minipage}{\HUST@footlinetitlewidth}%
+            \centering\insertshorttitle%
+          \end{minipage}%
+          \hfill%
+          \makebox[.08\paperwidth][r]{\insertframenumber}%
+          \hspace*{.02325\paperwidth}%
+        }%
+        \vfil%
+      }%
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+\newif\ifHUSTAutoFrameTitle
+\HUSTAutoFrameTitletrue
+\newcommand{\HUSTEnableAutoFrameTitle}{\HUSTAutoFrameTitletrue}
+\newcommand{\HUSTDisableAutoFrameTitle}{\HUSTAutoFrameTitlefalse}
+
+\newcommand{\HUST@defaultframetitle}{%
+  \ifHUSTAutoFrameTitle
+    \ifbeamer@plainframe\else
+      \ifx\insertsectionhead\@empty\else
+        \frametitle{\insertsectionhead}%
+      \fi
+    \fi
+  \fi
+}
+
+\def\beamer@checkframetitle{\@ifnextchar\bgroup\beamer@inlineframetitle\HUST@defaultframetitle}
+
+\setbeamertemplate{frametitle}{%
+  \HUST@measureframetitle%
+  \nointerlineskip%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north,text=HUSTBlue,font=\usebeamerfont{frametitle},align=center,text width=\HUST@frametitlewidth]
+      at ([xshift=\HUST@frametitlecenterx,yshift=-.035\paperheight]current page.north west)
+      {\insertframetitle};
+  \end{tikzpicture}%
+  \vspace{\HUST@frametitlevskip}%
+}
+
+\setbeamertemplate{title page}{%
+  \HUST@measuretitlelayout%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=center,inner sep=0pt]
+      at ([yshift=-.14\paperheight]current page.north) {\includegraphics[width=\HUST@titlelogowidth,height=\HUST@titlelogoheight,keepaspectratio]{\HUSTLogoPath}};
+    \node[anchor=center,fill=HUSTBlue,text=white,font=\usebeamerfont{title},align=center,
+      text width=\HUST@titlebarmaxwidth,minimum width=\paperwidth,minimum height=\HUST@titlebarheight,inner sep=0pt]
+      at ([yshift=-\HUST@titlebarcenter]current page.north) {\inserttitle};
+    \node[anchor=north,text=HUSTBlue,align=center,text width=.86\paperwidth]
+      at ([yshift=-\HUST@titleauthorblocktop]current page.north) {%
+        {\usebeamerfont{author}\insertauthor\par}%
+        \vspace{.100\paperheight}%
+        {\usebeamerfont{institute}\insertinstitute\par}%
+        \vspace{.020\paperheight}%
+        {\usebeamerfont{date}\insertdate\par}%
+      };
+  \end{tikzpicture}%
+  \null%
+}
+
+\newcommand{\HUSTTitleFrame}{%
+  {%
+    \setbeamertemplate{background}{}%
+    \setbeamertemplate{footline}{}%
+    \begin{frame}[plain]
+      \titlepage
+    \end{frame}%
+  }%
+}
+
+\newif\ifHUSTSectionOutline
+\HUSTSectionOutlinetrue
+\newcommand{\HUSTEnableSectionOutline}{\HUSTSectionOutlinetrue}
+\newcommand{\HUSTDisableSectionOutline}{\HUSTSectionOutlinefalse}
+
+\newcommand{\HUST@tocmetrics}{%
+  \ifnum\beamer@sectionmax>10\relax
+    \def\HUST@tocfontsize{22}\def\HUST@tocbaselineskip{27}%
+    \def\HUST@tocnumfontsize{24}\def\HUST@tocnumbaselineskip{29}%
+    \def\HUST@toctop{1.22}%
+    \pgfmathsetmacro{\HUST@tocstep}{5.25/(\the\beamer@sectionmax-1)}%
+    \pgfmathsetmacro{\HUST@tocheight}{min(.42,\HUST@tocstep*.86)}%
+  \else\ifnum\beamer@sectionmax>7\relax
+    \def\HUST@tocfontsize{24}\def\HUST@tocbaselineskip{29}%
+    \def\HUST@tocnumfontsize{27}\def\HUST@tocnumbaselineskip{32}%
+    \def\HUST@toctop{1.22}%
+    \pgfmathsetmacro{\HUST@tocstep}{5.25/(\the\beamer@sectionmax-1)}%
+    \pgfmathsetmacro{\HUST@tocheight}{min(.54,\HUST@tocstep*.86)}%
+  \else\ifnum\beamer@sectionmax>5\relax
+    \def\HUST@tocfontsize{32}\def\HUST@tocbaselineskip{38}%
+    \def\HUST@tocnumfontsize{34}\def\HUST@tocnumbaselineskip{40}%
+    \def\HUST@toctop{1.20}%
+    \pgfmathsetmacro{\HUST@tocstep}{.82}%
+    \pgfmathsetmacro{\HUST@tocheight}{.72}%
+  \else
+    \def\HUST@tocfontsize{40}\def\HUST@tocbaselineskip{46}%
+    \def\HUST@tocnumfontsize{40}\def\HUST@tocnumbaselineskip{46}%
+    \def\HUST@toctop{1.253}%
+    \pgfmathsetmacro{\HUST@tocstep}{1.17}%
+    \pgfmathsetmacro{\HUST@tocheight}{.978}%
+  \fi\fi\fi
+}
+
+\newcommand{\HUST@tocentry}[3]{%
+  \HUST@tocmetrics%
+  \pgfmathsetlength{\HUST@tocleftlen}{.239925\paperwidth}%
+  \pgfmathsetlength{\HUST@tocrightlen}{.760575\paperwidth}%
+  \pgfmathsetlength{\HUST@tocrowtoplen}{(\HUST@toctop+(#2-1)*\HUST@tocstep)*\paperheight/7.5}%
+  \pgfmathsetlength{\HUST@tocheightlen}{\HUST@tocheight*\paperheight/7.5}%
+  \setlength{\HUST@tocbottomlen}{\dimexpr\HUST@tocrowtoplen+\HUST@tocheightlen\relax}%
+  \setlength{\HUST@tocradiuslen}{\dimexpr\HUST@tocheightlen/2\relax}%
+  \setlength{\HUST@toccenterxlen}{\dimexpr\HUST@tocleftlen+\HUST@tocradiuslen\relax}%
+  \setlength{\HUST@toccenterylen}{\dimexpr-\HUST@tocrowtoplen-\HUST@tocradiuslen\relax}%
+  \pgfmathsetlength{\HUST@toctextxlen}{\HUST@tocleftlen+\HUST@tocheightlen+.02025\paperwidth}%
+  \pgfmathsetlength{\HUST@tocinnerradiuslen}{.726*\HUST@tocradiuslen}%
+  \setlength{\HUST@toctextwidthlen}{\dimexpr\HUST@tocrightlen-\HUST@toctextxlen-.018\paperwidth\relax}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \begin{scope}[shift={(current page.north west)},opacity=#1]
+      \shade[left color=HUSTAgendaLeft,right color=HUSTAgendaRight,rounded corners=\HUST@tocradiuslen]
+        (\HUST@tocleftlen,-\HUST@tocrowtoplen) rectangle (\HUST@tocrightlen,-\HUST@tocbottomlen);
+      \fill[white] (\HUST@toccenterxlen,\HUST@toccenterylen) circle (\HUST@tocradiuslen);
+      \shade[outer color=HUSTCircleBlue!75!HUSTDarkBlue,inner color=white]
+        (\HUST@toccenterxlen,\HUST@toccenterylen) circle (\HUST@tocradiuslen);
+      \fill[white] (\HUST@toccenterxlen,\HUST@toccenterylen) circle (\HUST@tocinnerradiuslen);
+      \draw[HUSTCircleBlue!70!HUSTDarkBlue,line width=2.2pt]
+        (\HUST@toccenterxlen,\HUST@toccenterylen) circle (\HUST@tocinnerradiuslen);
+      \node[text=HUSTBlue,font=\rmfamily\bfseries\fontsize{\HUST@tocnumfontsize}{\HUST@tocnumbaselineskip}\selectfont]
+        at (\HUST@toccenterxlen,\HUST@toccenterylen) {#2};
+      \node[anchor=west,text=HUSTBlue,align=left,text width=\HUST@toctextwidthlen,
+        font=\HUSTHeiFont\bfseries\fontsize{\HUST@tocfontsize}{\HUST@tocbaselineskip}\selectfont]
+        at (\HUST@toctextxlen,\HUST@toccenterylen) {#3};
+    \end{scope}%
+  \end{tikzpicture}%
+}
+
+\setbeamertemplate{section in toc}{\HUST@tocentry{1}{\inserttocsectionnumber}{\inserttocsection}}
+\setbeamertemplate{section in toc shaded}{\HUST@tocentry{.16}{\inserttocsectionnumber}{\inserttocsection}}
+\setbeamertemplate{subsection in toc}{}
+\setbeamertemplate{subsubsection in toc}{}
+
+\newcommand{\HUSTOutline}[1][]{%
+  \begingroup%
+  \setcounter{tocdepth}{1}%
+  \def\HUST@outlinearg{#1}%
+  \ifx\HUST@outlinearg\@empty
+    \tableofcontents[hideallsubsections]%
+  \else
+    \tableofcontents[currentsection,hideallsubsections]%
+  \fi
+  \endgroup%
+}
+
+\AtBeginSection[]{%
+  \ifHUSTSectionOutline
+    \begin{frame}{汇报提纲}
+      \HUSTOutline[currentsection]
+    \end{frame}%
+  \fi
+}
+
+\pgfkeys{%
+  /HUST requirement frame/.is family,
+  /HUST requirement frame,
+  fontsize/.store in=\HUST@requirementfontsize,
+  baselineskip/.store in=\HUST@requirementbaselineskip,
+  left/.code={\setlength{\HUST@requirementleftskip}{#1}},
+  right/.code={\setlength{\HUST@requirementrightskip}{#1}},
+  top/.store in=\HUST@requirementtopskip,
+  compact/.style={fontsize=24,baselineskip=32,left=.070\paperwidth,right=.040\paperwidth,top=.03in},
+  dense/.style={fontsize=22,baselineskip=29,left=.0525\paperwidth,right=.035\paperwidth,top=.02in},
+}
+
+\pgfkeys{%
+  /HUST content frame/.is family,
+  /HUST content frame,
+  fontsize/.store in=\HUST@contentfontsize,
+  baselineskip/.store in=\HUST@contentbaselineskip,
+  top/.store in=\HUST@contenttopskip,
+  compact/.style={fontsize=22,baselineskip=29,top=-.04in},
+  dense/.style={fontsize=22,baselineskip=27,top=-.05in},
+}
+
+\newcommand{\HUST@setrequirementoptions}[1]{%
+  \renewcommand{\HUST@requirementfontsize}{\HUST@requirementdefaultfontsize}%
+  \renewcommand{\HUST@requirementbaselineskip}{\HUST@requirementdefaultbaselineskip}%
+  \renewcommand{\HUST@requirementtopskip}{\HUST@requirementdefaulttop}%
+  \setlength{\HUST@requirementleftskip}{\HUST@requirementdefaultleft}%
+  \setlength{\HUST@requirementrightskip}{\HUST@requirementdefaultright}%
+  \pgfkeys{/HUST requirement frame,#1}%
+}
+
+\newcommand{\HUST@setcontentoptions}[1]{%
+  \renewcommand{\HUST@contentfontsize}{\HUST@contentdefaultfontsize}%
+  \renewcommand{\HUST@contentbaselineskip}{\HUST@contentdefaultbaselineskip}%
+  \renewcommand{\HUST@contenttopskip}{\HUST@contentdefaulttop}%
+  \pgfkeys{/HUST content frame,#1}%
+}
+
+\newenvironment{HUSTRequirementFrame}[1][]{%
+  \HUST@setrequirementoptions{#1}%
+  \par\vspace{\HUST@requirementtopskip}%
+  \begingroup%
+  \leftskip=\HUST@requirementleftskip%
+  \rightskip=\HUST@requirementrightskip%
+  \parindent=0pt%
+  \HUSTSerifFont\fontsize{\HUST@requirementfontsize}{\HUST@requirementbaselineskip}\selectfont%
+}{%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTContentFrame}[1][]{%
+  \HUST@setcontentoptions{#1}%
+  \par\vspace{\HUST@contenttopskip}%
+  \begingroup%
+  \HUSTLatinFont\HUSTSerifFont\fontsize{\HUST@contentfontsize}{\HUST@contentbaselineskip}\selectfont%
+  \setlength{\parindent}{0pt}%
+  \setlength{\abovedisplayskip}{.06in}%
+  \setlength{\belowdisplayskip}{.06in}%
+  \setlength{\heavyrulewidth}{.08em}%
+  \setlength{\lightrulewidth}{.05em}%
+  \setlength{\cmidrulewidth}{.03em}%
+}{%
+  \par\endgroup%
+}
+
+\newcommand{\HUST@maybecontenttitle}[1]{%
+  \if\relax\detokenize{#1}\relax\else
+    {\par\centering\usebeamerfont{block title example}\usebeamercolor[fg]{block title example}#1\par\vspace{.04in}}%
+  \fi
+}
+
+\newenvironment{HUSTFigureBlock}[1][]{%
+  \par\begingroup%
+  \HUST@maybecontenttitle{#1}%
+  \centering%
+}{%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTCodeBlock}[1][]{%
+  \par\begingroup%
+  \HUST@maybecontenttitle{#1}%
+  \lstset{style=HUSTCode}%
+}{%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTAlgorithmBlock}[1][]{%
+  \par\begingroup%
+  \HUST@maybecontenttitle{#1}%
+  \lstset{style=HUSTAlgorithm}%
+}{%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTTableBlock}[1][]{%
+  \par\begingroup%
+  \HUST@maybecontenttitle{#1}%
+  \centering%
+  \renewcommand{\arraystretch}{1.12}%
+  \setlength{\tabcolsep}{9pt}%
+}{%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTEquationBlock}[1][]{%
+  \par\begingroup%
+  \HUST@maybecontenttitle{#1}%
+  \centering%
+}{%
+  \par\endgroup%
+}
+
+\newcommand{\HUST@semanticblocksetup}[2]{%
+  \setbeamercolor{block title}{fg=white,bg=#1}%
+  \setbeamercolor{block body}{fg=black,bg=#2}%
+  \setbeamerfont{block title}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{24}{29}\selectfont,series=\bfseries}%
+  \setbeamerfont{block body}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
+  \setbeamerfont{itemize/enumerate body}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
+  \setbeamerfont{itemize/enumerate subbody}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
+  \setbeamerfont{itemize/enumerate subsubbody}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
+}
+
+\newenvironment{HUSTKeyPointBlock}[1]{%
+  \par\begingroup%
+  \HUST@semanticblocksetup{HUSTBlue}{HUSTKeyPointBackground}%
+  \begin{block}{#1}%
+}{%
+  \end{block}%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTAlertBlock}[1]{%
+  \par\begingroup%
+  \HUST@semanticblocksetup{HUSTAlertRed}{HUSTAlertBackground}%
+  \begin{block}{#1}%
+}{%
+  \end{block}%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTConclusionBlock}[1]{%
+  \par\begingroup%
+  \HUST@semanticblocksetup{HUSTConclusionGreen}{HUSTConclusionBackground}%
+  \begin{block}{#1}%
+}{%
+  \end{block}%
+  \par\endgroup%
+}
+
+\newenvironment{HUSTReferenceBlock}[1][black]{%
+  \par%
+  \begingroup%
+  \color{#1}%
+  \hypersetup{allcolors=#1}%
+  \setbeamercolor{bibliography item}{fg=#1}%
+  \setbeamercolor{bibliography entry author}{fg=#1}%
+  \setbeamercolor{bibliography entry title}{fg=#1}%
+  \setbeamercolor{bibliography entry location}{fg=#1}%
+  \setbeamercolor{bibliography entry note}{fg=#1}%
+  \setbeamertemplate{bibliography item}{\insertbiblabel}%
+  \renewcommand*{\bibfont}{\HUST@referencefont\color{#1}\raggedright}%
+  \setlength{\bibitemsep}{.018in}%
+  \setlength{\bibhang}{.22in}%
+}{%
+  \par\endgroup%
+}
+
+\pgfkeys{%
+  /HUST frame references/.is family,
+  /HUST frame references,
+  fontsize/.code={%
+    \renewcommand{\HUST@framereffontsize}{#1}%
+    \pgfmathsetmacro{\HUST@framerefbaselineskip}{#1*1.18}%
+  },
+  baselineskip/.code={\renewcommand{\HUST@framerefbaselineskip}{#1}},
+  maxitems/.store in=\HUST@framerefmaxitems,
+  beforeskip/.store in=\HUST@framerefbeforeskip,
+  afterskip/.store in=\HUST@framerefafterskip,
+  bottom/.is if=HUST@framerefbottom,
+  inline/.style={bottom=false},
+}
+
+\newcommand{\HUST@setframerefoptions}[1]{%
+  \renewcommand{\HUST@framereffontsize}{11}%
+  \renewcommand{\HUST@framerefbaselineskip}{13}%
+  \renewcommand{\HUST@framerefmaxitems}{0}%
+  \renewcommand{\HUST@framerefbeforeskip}{.02in}%
+  \renewcommand{\HUST@framerefafterskip}{-1.20in}%
+  \HUST@framerefbottomtrue%
+  \pgfkeys{/HUST frame references,#1}%
+  \setcounter{HUST@framebibitem}{0}%
+  \setcounter{HUST@framebibmax}{\HUST@framerefmaxitems}%
+  \renewcommand{\HUST@referencefont}{\HUSTRefLatinFont\HUSTRefCJKFont\fontsize{\HUST@framereffontsize}{\HUST@framerefbaselineskip}\selectfont}%
+}
+
+\defbibcheck{HUSTFrameReferenceLimit}{%
+  \stepcounter{HUST@framebibitem}%
+  \ifnum\value{HUST@framebibmax}>0\relax
+    \ifnum\value{HUST@framebibitem}>\value{HUST@framebibmax}\relax
+      \skipentry
+    \fi
+  \fi
+}
+
+\newcommand{\HUSTFrameReferences}[1][]{%
+  \begingroup%
+  \HUST@setframerefoptions{#1}%
+  \ifHUST@framerefbottom\par\vfill\fi%
+  \par\vspace{\HUST@framerefbeforeskip}%
+  \begin{HUSTReferenceBlock}[HUSTReferenceGray]%
+    \printbibliography[heading=none,segment=\therefsegment,check=HUSTFrameReferenceLimit]%
+  \end{HUSTReferenceBlock}%
+  \ifHUST@framerefbottom\par\vspace{\HUST@framerefafterskip}\fi%
+  \endgroup%
+}
+
+\newcommand{\HUSTOverlayFrameReferences}[1][]{%
+  \setlength{\HUST@referencewidth}{\dimexpr\paperwidth-1.40in\relax}%
+  \begingroup%
+  \HUST@setframerefoptions{#1}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south,inner sep=0pt,text width=\HUST@referencewidth]
+      at ([yshift=.50in]current page.south) {%
+        \begin{minipage}{\HUST@referencewidth}%
+          \begin{HUSTReferenceBlock}[HUSTReferenceGray]%
+            \printbibliography[heading=none,segment=\therefsegment,check=HUSTFrameReferenceLimit]%
+          \end{HUSTReferenceBlock}%
+        \end{minipage}%
+      };
+  \end{tikzpicture}%
+  \endgroup%
+}
+
+\newcommand{\HUSTReferencesFrame}[1][参考文献]{%
+  {%
+    \setbeamertemplate{frametitle continuation}{}%
+    \begin{frame}[t,allowframebreaks]{#1}%
+      \begin{HUSTReferenceBlock}[black]%
+        \printbibliography[heading=none]%
+      \end{HUSTReferenceBlock}%
+    \end{frame}%
+  }%
+}
+
+\newcommand{\HUSTThanks}{%
+  \HUST@measuretitlelayout%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=center,inner sep=0pt]
+      at ([yshift=-.14\paperheight]current page.north) {\includegraphics[width=\HUST@titlelogowidth,height=\HUST@titlelogoheight,keepaspectratio]{\HUSTLogoPath}};
+    \node[anchor=center,text=HUSTBlue,font=\HUSTSerifFont\bfseries\fontsize{80}{96}\selectfont,align=center,text width=.55\paperwidth]
+      at (current page.center) {谢谢大家！\\敬请批评指正！};
+  \end{tikzpicture}%
+}
+
+\newcommand{\HUSTThanksFrame}{%
+  {%
+    \setbeamertemplate{background}{}%
+    \begin{frame}{}
+      \HUSTThanks
+    \end{frame}%
+  }%
+}
+
+\mode<all>

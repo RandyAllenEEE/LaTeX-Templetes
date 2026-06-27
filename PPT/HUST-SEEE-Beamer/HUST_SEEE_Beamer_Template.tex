@@ -1,0 +1,334 @@
+% !TeX program = xelatex
+\documentclass[10pt,aspectratio=169]{beamer}
+
+%%%%-----导入宏包-----%%%%
+\usepackage[UTF8]{ctex}       % 中文支持，建议使用 xelatex 编译
+\usepackage{hustseee}         % HUST-SEEE Beamer 模板宏包
+\usepackage{amsmath,amsfonts,amssymb,bm}
+\usepackage{graphicx,hyperref,url}
+\usefonttheme[onlymath]{serif}
+\HUSTAddBibResource{HUST_SEEE_Beamer_Template.bib}
+%%%%%%%%%%%%%%%%%%
+
+%%%%----首页信息设置----%%%%
+\title[汇报主题]{汇报主题}
+\author{汇报人：xxx}
+\institute{华中科技大学高压大功率特种电源研究组}
+\date{20xx年x月x日}
+%%%%------------------------%%%%
+
+\begin{document}
+
+\HUSTTitleFrame
+
+\begin{frame}{汇报提纲}
+  \HUSTOutline
+\end{frame}
+
+\section{课题研究背景}
+\begin{frame}
+\begin{HUSTRequirementFrame}
+\HUSTRequirementHeading{基本要求：}\\
+1. \quad 阐明课题研究背景，突出课题研究意义。\\
+2. \quad 目标导向明确，主线清晰，自然衔接研究主题。\\
+3. \quad 图文并茂，最小字号不低于22pt。
+\end{HUSTRequirementFrame}
+\end{frame}
+
+\section{国内外研究现状}
+\begin{frame}
+\begin{refsegment}
+\begin{HUSTRequirementFrame}
+\HUSTRequirementHeading{基本要求：}\\
+1. \quad 充分调研国内外文献，分类整理，避免简单罗列\uppercite{sample-tpel-2024}。\\
+2. \quad 以旁观者视角，客观评述国内外研究现状\uppercite{sample-ieee-2023}。\\
+3. \quad 提炼共性问题，自然引导拟开展的研究工作。\\
+4. \quad 图文并茂，最小字号不低于22pt。
+\end{HUSTRequirementFrame}
+\HUSTFrameReferences
+\end{refsegment}
+\end{frame}
+
+\begin{frame}{研究必要性小结}
+\begin{HUSTRequirementFrame}[compact]
+\HUSTRequirementHeading{研究对象：}\\[.18in]
+\HUSTRequirementHeading{目标需求（结合定量技术指标说明）：}\\[.18in]
+\HUSTRequirementHeading{主要技术路线的局限性：}\\[.18in]
+\HUSTRequirementHeading{本工作拟解决的问题：}
+\end{HUSTRequirementFrame}
+\end{frame}
+
+\section{已开展的研究工作}
+\begin{frame}
+\begin{HUSTRequirementFrame}
+\HUSTRequirementHeading{基本要求：}\\
+1. \quad 内容详实，逻辑清晰，论证充分。\\
+2. \quad 把握叙事节奏，兼顾听众体验。\\
+3. \quad 图文并茂，最小字号不低于22pt。
+\end{HUSTRequirementFrame}
+\end{frame}
+
+\begin{frame}
+\begin{HUSTContentFrame}
+\begin{HUSTFigureBlock}[图形样式示例]
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=1in,y=1in]
+  \draw[HUSTDarkBlue,line width=.9pt,->] (0,0) -- (0,2.26)
+    node[above,text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]{输出电压};
+  \draw[HUSTDarkBlue,line width=.9pt,->] (0,0) -- (5.18,0)
+    node[right,text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]{时间};
+  \foreach \x/\label in {0.9/$t_1$,1.8/$t_2$,2.7/$t_3$,3.6/$t_4$,4.5/$t_5$}
+    \draw[HUSTDarkBlue,line width=.45pt] (\x,.035) -- (\x,-.035);
+  \foreach \y/\label in {.55/$0.5U_o$,1.10/$U_o$,1.65/$1.5U_o$}
+    \draw[HUSTDarkBlue,line width=.45pt] (.035,\y) -- (-.035,\y);
+  \draw[HUSTBlue!65!black,dashed,line width=.75pt]
+    (0,1.10) -- (4.85,1.10) node[right,text=HUSTBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]{目标值};
+  \draw[HUSTBlue,line width=1.45pt,smooth]
+    plot coordinates {(0,.26) (.58,.62) (1.18,1.02) (1.82,1.31) (2.42,1.13) (3.05,1.52) (3.68,1.38) (4.32,1.67) (4.85,1.56)};
+  \foreach \x/\y/\t in {1.18/1.02/A,2.42/1.13/B,3.68/1.38/C,4.85/1.56/D}
+    \fill[HUSTBlue] (\x,\y) circle (.035) node[above,text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]{\t};
+\end{tikzpicture}
+\caption{控制策略下输出电压响应曲线示意图}
+\end{figure}
+\end{HUSTFigureBlock}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}
+\begin{HUSTContentFrame}
+\begin{HUSTTableBlock}[表格样式示例]
+\begin{table}
+\centering
+\caption{不同方案关键指标对比}
+\HUSTLatinFont\HUSTSerifFont\fontsize{22}{29}\selectfont
+\begin{tabular}{lccc}
+\toprule
+方案 & 峰值效率 & 输出纹波 & 动态恢复时间 \\
+\midrule
+传统 PI 控制 & 92.1\% & 3.8\% & 4.6 ms \\
+前馈补偿控制 & 94.7\% & 2.4\% & 3.1 ms \\
+预测优化控制 & 96.2\% & 1.6\% & 2.2 ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{HUSTTableBlock}
+\vspace{.12in}
+\begin{itemize}
+  \item 建议优先使用 booktabs 的 \(\backslash\)toprule、\(\backslash\)midrule、\(\backslash\)bottomrule。
+  \item 表格标题自动编号，便于正文中引用与说明。
+\end{itemize}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}
+\begin{HUSTContentFrame}
+\begin{HUSTEquationBlock}[公式样式示例]
+\HUSTLatinFont\HUSTSerifFont\fontsize{22}{30}\selectfont
+\begin{equation}
+  J = \sum_{k=0}^{N-1}\left(\lVert \bm{x}_k-\bm{x}^{\ast}_k\rVert_Q^2
+  + \lVert \bm{u}_k\rVert_R^2\right)
+\end{equation}
+\begin{align}
+  \bm{x}_{k+1} &= A\bm{x}_k + B\bm{u}_k, \\
+  \bm{u}^{\ast}_k &= \arg\min_{\bm{u}_k} J .
+\end{align}
+\end{HUSTEquationBlock}
+\vspace{.10in}
+\begin{itemize}
+  \item 单行公式使用 equation，多行推导使用 align。
+  \item 变量矩阵建议使用 \(\backslash\)bm\{\}，文字下标建议使用 \(\backslash\)mathrm\{\} 或 \(\backslash\)text\{\}。
+\end{itemize}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{HUSTContentFrame}
+\begin{HUSTAlgorithmBlock}[算法伪代码示例]
+\begin{lstlisting}[language={}]
+Input: reference r, measured state x
+Initialize: horizon N, weights Q/R
+Predict state sequence
+Solve constrained optimization
+Apply first control increment
+Output: switching command
+\end{lstlisting}
+\end{HUSTAlgorithmBlock}
+\vspace{.06in}
+\begin{itemize}
+  \item 伪代码页需使用 \texttt{fragile} frame。
+  \item 长流程建议拆为多页展示。
+\end{itemize}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{HUSTContentFrame}
+\begin{HUSTCodeBlock}[代码片段示例]
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def rms_error(reference, measured):
+    error = np.asarray(reference) - measured
+    return np.sqrt(np.mean(error ** 2))
+\end{lstlisting}
+\end{HUSTCodeBlock}
+\vspace{.06in}
+\begin{itemize}
+  \item 代码页应只保留关键函数。
+  \item 长代码建议拆成多页说明。
+\end{itemize}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}{重点结论 Block 示例}
+\begin{HUSTContentFrame}
+\begin{HUSTKeyPointBlock}{关键发现}
+预测优化控制可同时压低纹波并缩短恢复时间。
+\end{HUSTKeyPointBlock}
+\vspace{.06in}
+\begin{HUSTAlertBlock}{需要关注}
+器件结温、采样延迟仍需实验验证。
+\end{HUSTAlertBlock}
+\vspace{.06in}
+\begin{HUSTConclusionBlock}{本页结论}
+下一阶段联合优化控制参数与保护策略。
+\end{HUSTConclusionBlock}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}{双栏图文示例}
+\begin{HUSTContentFrame}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{.52\textwidth}
+\begin{HUSTFigureBlock}[实验平台与信号链路]
+\begin{tikzpicture}[x=1in,y=1in]
+  \tikzset{module/.style={draw=HUSTBlue,rounded corners=3pt,line width=.75pt,
+    fill=HUSTAgendaLeft!35,minimum width=1.18in,minimum height=.38in,
+    align=center,font=\HUSTHeiFont\fontsize{22}{26}\selectfont}}
+  \node[module] (ref) at (0,1.65) {参考轨迹};
+  \node[module] (ctrl) at (1.55,1.65) {控制器};
+  \node[module] (drive) at (3.10,1.65) {驱动保护};
+  \node[module] (plant) at (3.10,.72) {功率变换};
+  \node[module] (sense) at (1.55,.72) {采样调理};
+  \draw[HUSTDarkBlue,line width=.8pt,->] (ref) -- (ctrl);
+  \draw[HUSTDarkBlue,line width=.8pt,->] (ctrl) -- (drive);
+  \draw[HUSTDarkBlue,line width=.8pt,->] (drive) -- (plant);
+  \draw[HUSTDarkBlue,line width=.8pt,->] (plant) -- (sense);
+  \draw[HUSTDarkBlue,line width=.8pt,->] (sense) -- (ctrl);
+  \draw[HUSTBlue,line width=1pt] (.10,.10) -- (.45,.10) -- (.62,.32) -- (.90,.32)
+    -- (1.05,.55) -- (1.35,.55) -- (1.52,.78) -- (1.88,.78);
+  \node[anchor=west,text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]
+    at (.08,-.20) {量测：电压、电流、温度};
+\end{tikzpicture}
+\end{HUSTFigureBlock}
+\end{column}
+\begin{column}{.44\textwidth}
+\begin{HUSTKeyPointBlock}{页面写法}
+\begin{itemize}
+  \item 左侧放图。
+  \item 右侧写结论。
+\end{itemize}
+\end{HUSTKeyPointBlock}
+\vspace{.05in}
+\begin{HUSTConclusionBlock}{适用场景}
+适合平台介绍与结果解释。
+\end{HUSTConclusionBlock}
+\end{column}
+\end{columns}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}{并列子图示例}
+\begin{HUSTContentFrame}
+\begin{HUSTFigureBlock}[方案对比结果]
+\begin{figure}
+\centering
+\begin{minipage}{.46\linewidth}
+\centering
+\begin{tikzpicture}[x=1in,y=1in]
+  \draw[HUSTDarkBlue,line width=.75pt,->] (0,0) -- (0,1.45);
+  \draw[HUSTDarkBlue,line width=.75pt,->] (0,0) -- (2.35,0);
+  \draw[HUSTReferenceGray,dashed,line width=.55pt] (0,.86) -- (2.18,.86);
+  \draw[HUSTAlertRed,line width=1.25pt,smooth]
+    plot coordinates {(0,.18) (.34,.98) (.68,1.22) (1.02,.72) (1.36,.98) (1.70,.82) (2.10,.88)};
+  \node[text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont] at (1.18,-.34) {（a）传统控制};
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}{.46\linewidth}
+\centering
+\begin{tikzpicture}[x=1in,y=1in]
+  \draw[HUSTDarkBlue,line width=.75pt,->] (0,0) -- (0,1.45);
+  \draw[HUSTDarkBlue,line width=.75pt,->] (0,0) -- (2.35,0);
+  \draw[HUSTReferenceGray,dashed,line width=.55pt] (0,.86) -- (2.18,.86);
+  \draw[HUSTBlue,line width=1.25pt,smooth]
+    plot coordinates {(0,.18) (.34,.67) (.68,.88) (1.02,.91) (1.36,.86) (1.70,.88) (2.10,.87)};
+  \node[text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont] at (1.18,-.34) {（b）优化控制};
+\end{tikzpicture}
+\end{minipage}
+\caption{不同控制策略下输出响应对比示意图}
+\end{figure}
+\end{HUSTFigureBlock}
+\vspace{-.03in}
+\begin{HUSTConclusionBlock}{对比结论}
+适合展示“传统方案 vs 本文方案”。
+\end{HUSTConclusionBlock}
+\end{HUSTContentFrame}
+\end{frame}
+
+\begin{frame}{时间计划与进度示例}
+\begin{HUSTContentFrame}
+\begin{HUSTFigureBlock}[下一阶段工作安排]
+\begin{tikzpicture}[x=1in,y=1in]
+  \tikzset{task/.style={rounded corners=3pt,minimum height=.26in,inner xsep=5pt,
+    font=\HUSTHeiFont\fontsize{22}{26}\selectfont,text=white}}
+  \foreach \x/\m in {.55/第1月,1.55/第2月,2.55/第3月,3.55/第4月,4.55/第5月}
+    \node[text=HUSTDarkBlue,font=\HUSTHeiFont\fontsize{22}{26}\selectfont] at (\x,1.95) {\m};
+  \foreach \x in {.55,1.55,2.55,3.55,4.55}
+    \draw[HUSTReferenceGray!45,line width=.45pt] (\x,1.70) -- (\x,.15);
+  \draw[HUSTDarkBlue,line width=.7pt] (.05,1.70) -- (5.05,1.70);
+  \node[anchor=east,text=HUSTDarkBlue,font=\HUSTHeiFont\fontsize{22}{26}\selectfont] at (-.05,1.32) {模型};
+  \node[anchor=east,text=HUSTDarkBlue,font=\HUSTHeiFont\fontsize{22}{26}\selectfont] at (-.05,.88) {参数};
+  \node[anchor=east,text=HUSTDarkBlue,font=\HUSTHeiFont\fontsize{22}{26}\selectfont] at (-.05,.44) {实验};
+  \node[task,fill=HUSTBlue,minimum width=1.58in] at (1.05,1.32) {已完成};
+  \node[task,fill=HUSTCircleBlue!85!HUSTDarkBlue,minimum width=1.85in] at (2.40,.88) {进行中};
+  \node[task,fill=HUSTConclusionGreen,minimum width=1.92in] at (3.95,.44) {计划开展};
+  \draw[HUSTBlue,line width=1pt,->] (.30,-.02) -- (4.90,-.02)
+    node[right,text=HUSTDarkBlue,font=\HUSTSerifFont\fontsize{22}{26}\selectfont]{时间};
+\end{tikzpicture}
+\end{HUSTFigureBlock}
+\vspace{-.03in}
+\begin{HUSTAlertBlock}{使用建议}
+进度页突出里程碑，避免堆叠表格。
+\end{HUSTAlertBlock}
+\end{HUSTContentFrame}
+\end{frame}
+
+\section{仿真分析与实验验证}
+\begin{frame}
+\begin{HUSTRequirementFrame}
+\HUSTRequirementHeading{基本要求：}\\
+1. \quad 所有结果必须真实，可检验，可重复，可再现。\\
+2. \quad 所有图表应清晰、完整、美观。
+\end{HUSTRequirementFrame}
+\end{frame}
+
+\section{小结与下一步工作}
+\begin{frame}
+\begin{HUSTRequirementFrame}
+\HUSTRequirementHeading{报告小结：}\\
+1. \quad 分点说明，言简意赅，概况主体工作。\\
+2. \quad 强调重点，突出特色，凝炼重要结论。\\
+3. \quad 要点不超过四点，最小字号不低于22pt。\\[.25in]
+\HUSTRequirementHeading{下一步工作：}\\
+1. \quad 分点说明，言简意赅，体现延续性。\\
+2. \quad 目标明确，思路清晰，突出可行性。\\
+3. \quad 要点不超过两点，最小字号不低于22pt。
+\end{HUSTRequirementFrame}
+\end{frame}
+
+\HUSTReferencesFrame
+
+\HUSTThanksFrame
+
+\end{document}

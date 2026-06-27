@@ -16,3 +16,4 @@
   - [HUSTMatNobleBeamer](https://github.com/MatNoble/HUSTMatNobleBeamer)
   - [HUST_Beamer_Theme](https://github.com/QYQSDTC/HUST_Beamer_Theme)
   - [HUST_-TJMU-_LaTex_Beamer_PPT_Template](https://github.com/Nellurkia/HUST_-TJMU-_LaTex_Beamer_PPT_Template)
+  - HUST-SEEE-Beamer:自建模板
