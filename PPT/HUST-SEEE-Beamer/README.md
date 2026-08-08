@@ -222,7 +222,7 @@ Logo 路径应使用相对路径，不建议使用绝对路径。
 - `\HUSTRequirementHeading{...}`：文字要求页/小结页标题，32pt 黑体蓝色加粗。
 - `\HUSTContentHeading{...}`：内容展示页中的页内标题，26pt 黑体蓝色加粗。
 
-这两类环境都支持可选参数。为满足正文最小字号不低于 22pt 的要求，`compact` 和 `dense` 只压缩行距、页边距和顶部留白，不会把正文字号降到 22pt 以下；如需手动指定字号，建议不要低于 22pt：
+这两类环境都支持可选参数。为满足正文最小字号不低于 22pt 的要求，`compact` 和 `dense` 只压缩行距、页边距并向上下边界扩展正文区域，不会把正文字号降到 22pt 以下；如需手动指定字号，建议不要低于 22pt：
 
 ```tex
 \begin{HUSTRequirementFrame}[compact]
@@ -233,7 +233,7 @@ Logo 路径应使用相对路径，不建议使用绝对路径。
   ...
 \end{HUSTContentFrame}
 
-\begin{HUSTContentFrame}[fontsize=22,baselineskip=28,top=-.04in]
+\begin{HUSTContentFrame}[fontsize=22,baselineskip=28,top=-.08in,bottom=-.06in]
   ...
 \end{HUSTContentFrame}
 ```
@@ -248,14 +248,14 @@ Logo 路径应使用相对路径，不建议使用绝对路径。
 
 默认值与快捷模式如下，字号和行距单位均为 pt：
 
-| 环境 | 模式 | 字号 | 行距 | 顶部留白 | 其他 |
+| 环境 | 模式 | 字号 | 行距 | 顶部/底部留白 | 其他 |
 | --- | --- | ---: | ---: | --- | --- |
-| `HUSTRequirementFrame` | 默认 | 28 | 39 | `.08in` | 左 `.08625\paperwidth`，右 `.0525\paperwidth` |
-| `HUSTRequirementFrame` | `compact` | 24 | 32 | `.03in` | 左 `.070\paperwidth`，右 `.040\paperwidth` |
-| `HUSTRequirementFrame` | `dense` | 22 | 29 | `.02in` | 左 `.0525\paperwidth`，右 `.035\paperwidth` |
-| `HUSTContentFrame` | 默认 | 22 | 30 | `-.02in` | — |
-| `HUSTContentFrame` | `compact` | 22 | 29 | `-.04in` | — |
-| `HUSTContentFrame` | `dense` | 22 | 27 | `-.05in` | 行距更紧凑 |
+| `HUSTRequirementFrame` | 默认 | 28 | 39 | `.08in` / — | 左 `.08625\paperwidth`，右 `.0525\paperwidth` |
+| `HUSTRequirementFrame` | `compact` | 24 | 32 | `.03in` / — | 左 `.070\paperwidth`，右 `.040\paperwidth` |
+| `HUSTRequirementFrame` | `dense` | 22 | 29 | `.02in` / — | 左 `.0525\paperwidth`，右 `.035\paperwidth` |
+| `HUSTContentFrame` | 默认 | 22 | 30 | `-.08in` / `-.06in` | 上下扩展正文可用区域 |
+| `HUSTContentFrame` | `compact` | 22 | 29 | `-.10in` / `-.08in` | 更紧凑 |
+| `HUSTContentFrame` | `dense` | 22 | 27 | `-.12in` / `-.10in` | 最大化正文区域 |
 
 文字要求页示例：
 
@@ -510,7 +510,7 @@ def rms_error(reference, measured):
 
 **方式一：页内参考文献 block（推荐）**
 
-某页有引用时，可用 `refsegment` 包住该页内容，并在正文合适位置调用 `\HUSTFrameReferences`。该 block 无标题条，直接显示当前 `refsegment` 中引用过的文献；它会占用正常正文空间，不会覆盖页脚或正文内容。默认情况下，模板会在参考文献 block 前加入 `\vfill`，将页内参考文献尽量下推到蓝色页脚上方。页内参考文献默认为 RGB `(127,127,127)` 灰色。
+某页有引用时，可用 `refsegment` 包住该页内容，并在正文合适位置调用 `\HUSTFrameReferences`。该 block 无标题条，直接显示当前 `refsegment` 中引用过的文献；它会占用正常正文空间，不会覆盖页脚或正文内容。默认页底模式会取消 Beamer 自带的底部弹性空白，并在正文与引用之间保留弹性间距：引用块下边缘贴近蓝色页脚，上边缘作为正文区域的下边界。页内参考文献默认为 RGB `(127,127,127)` 灰色，正文式与兼容式页内参考文献均使用约 `95%` 页宽，使左右边缘更靠近页面边界。
 
 ```tex
 \begin{frame}
@@ -529,10 +529,10 @@ def rms_error(reference, measured):
 \HUSTFrameReferences[fontsize=10,baselineskip=12,maxitems=2]
 ```
 
-其中 `maxitems=0` 表示不限制条数。默认页底模式还支持 `afterskip` 微调参考文献与蓝色页脚的贴近程度，默认值为 `-1.20in`；数值越负，参考文献越靠下：
+其中 `maxitems=0` 表示不限制条数。默认页底模式下 `afterskip=0pt`，引用块会直接落在正文区域底部、紧邻蓝色页脚。可用较小的正值将引用略微上移；负值可能侵入页脚区域，一般不建议使用：
 
 ```tex
-\HUSTFrameReferences[afterskip=-1.10in]
+\HUSTFrameReferences[afterskip=.03in]
 ```
 
 若希望参考文献紧跟正文，而不是自动下推到页底附近，可使用 `inline` 模式；`beforeskip` 可控制正文与参考文献之间的额外间距：
@@ -541,9 +541,9 @@ def rms_error(reference, measured):
 \HUSTFrameReferences[inline,beforeskip=.08in]
 ```
 
-**方式二：页内参考文献 overlay（谨慎使用）**
+**方式二：页内参考文献兼容命令**
 
-若某页正文空间已经预留好，也可以使用旧版的浮动页底形式。该命令不会占用正文空间，内容较多时可能覆盖正文，因此建议只在引用很少的页面使用：
+旧版文档中的 `\HUSTOverlayFrameReferences` 仍可继续使用，但现在会自动转为与 `\HUSTFrameReferences` 相同的安全页底布局：参考文献占用正常正文空间，并通过弹性留白下推到页脚上方，不再悬浮覆盖正文。
 
 ```tex
 \HUSTOverlayFrameReferences[fontsize=10,maxitems=2]
