@@ -347,13 +347,18 @@
       \vbox to \HUST@footlineheight{%
         \vfil%
         \hbox to \paperwidth{%
+          \rlap{%
+            \hbox to \paperwidth{%
+              \hfill%
+              \makebox[.08\paperwidth][r]{\insertframenumber}%
+              \hspace*{.02325\paperwidth}%
+            }%
+          }%
           \hfill%
           \begin{minipage}{\HUST@footlinetitlewidth}%
             \centering\insertshorttitle%
           \end{minipage}%
           \hfill%
-          \makebox[.08\paperwidth][r]{\insertframenumber}%
-          \hspace*{.02325\paperwidth}%
         }%
         \vfil%
       }%
