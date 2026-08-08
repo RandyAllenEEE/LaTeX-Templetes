@@ -66,15 +66,17 @@
 
 \ifXeTeX
   \newcommand{\HUST@setseriffont}[1]{%
+    \setCJKmainfont[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
     \setCJKfamilyfont{hustserif}[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
     \renewcommand{\HUSTSerifFont}{\CJKfamily{hustserif}}%
   }
   \newcommand{\HUST@setheifont}[1]{%
+    \setCJKsansfont[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
     \setCJKfamilyfont{husthei}[Path=\HUST@fontpath,AutoFakeBold=1.8]{#1}%
     \renewcommand{\HUSTHeiFont}{\CJKfamily{husthei}}%
   }
   \newcommand{\HUST@setrefcjkfont}[1]{%
-    \setCJKfamilyfont{hustrefcjk}[Path=\HUST@fontpath,AutoFakeBold=1.4]{#1}%
+    \setCJKfamilyfont{hustrefcjk}[Path=\HUST@fontpath,AutoFakeBold=1.4,AutoFakeSlant=.2]{#1}%
     \renewcommand{\HUSTRefCJKFont}{\CJKfamily{hustrefcjk}}%
   }
   \newcommand{\HUST@setreflatinfontfile}[1]{%
@@ -232,7 +234,7 @@
 \newcommand{\HUST@framerefbaselineskip}{13}
 \newcommand{\HUST@framerefmaxitems}{0}
 \newcommand{\HUST@framerefbeforeskip}{.02in}
-\newcommand{\HUST@framerefafterskip}{-1.20in}
+\newcommand{\HUST@framerefafterskip}{0pt}
 \newif\ifHUST@framerefbottom
 \newcommand{\HUST@requirementdefaultfontsize}{28}
 \newcommand{\HUST@requirementdefaultbaselineskip}{39}
@@ -244,10 +246,12 @@
 \newcommand{\HUST@requirementtopskip}{.08in}
 \newcommand{\HUST@contentdefaultfontsize}{22}
 \newcommand{\HUST@contentdefaultbaselineskip}{30}
-\newcommand{\HUST@contentdefaulttop}{-.02in}
+\newcommand{\HUST@contentdefaulttop}{-.08in}
+\newcommand{\HUST@contentdefaultbottom}{-.06in}
 \newcommand{\HUST@contentfontsize}{22}
 \newcommand{\HUST@contentbaselineskip}{30}
-\newcommand{\HUST@contenttopskip}{-.02in}
+\newcommand{\HUST@contenttopskip}{-.08in}
+\newcommand{\HUST@contentbottomskip}{-.06in}
 \newlength{\HUST@tocleftlen}
 \newlength{\HUST@tocrightlen}
 \newlength{\HUST@tocrowtoplen}
@@ -533,8 +537,9 @@
   fontsize/.store in=\HUST@contentfontsize,
   baselineskip/.store in=\HUST@contentbaselineskip,
   top/.store in=\HUST@contenttopskip,
-  compact/.style={fontsize=22,baselineskip=29,top=-.04in},
-  dense/.style={fontsize=22,baselineskip=27,top=-.05in},
+  bottom/.store in=\HUST@contentbottomskip,
+  compact/.style={fontsize=22,baselineskip=29,top=-.10in,bottom=-.08in},
+  dense/.style={fontsize=22,baselineskip=27,top=-.12in,bottom=-.10in},
 }
 
 \newcommand{\HUST@setrequirementoptions}[1]{%
@@ -550,6 +555,7 @@
   \renewcommand{\HUST@contentfontsize}{\HUST@contentdefaultfontsize}%
   \renewcommand{\HUST@contentbaselineskip}{\HUST@contentdefaultbaselineskip}%
   \renewcommand{\HUST@contenttopskip}{\HUST@contentdefaulttop}%
+  \renewcommand{\HUST@contentbottomskip}{\HUST@contentdefaultbottom}%
   \pgfkeys{/HUST content frame,#1}%
 }
 
@@ -577,7 +583,7 @@
   \setlength{\lightrulewidth}{.05em}%
   \setlength{\cmidrulewidth}{.03em}%
 }{%
-  \par\endgroup%
+  \par\vspace{\HUST@contentbottomskip}\endgroup%
 }
 
 \newcommand{\HUST@maybecontenttitle}[1]{%
@@ -703,7 +709,7 @@
   \renewcommand{\HUST@framerefbaselineskip}{13}%
   \renewcommand{\HUST@framerefmaxitems}{0}%
   \renewcommand{\HUST@framerefbeforeskip}{.02in}%
-  \renewcommand{\HUST@framerefafterskip}{-1.20in}%
+  \renewcommand{\HUST@framerefafterskip}{0pt}%
   \HUST@framerefbottomtrue%
   \pgfkeys{/HUST frame references,#1}%
   \setcounter{HUST@framebibitem}{0}%
@@ -721,32 +727,30 @@
 }
 
 \newcommand{\HUSTFrameReferences}[1][]{%
-  \begingroup%
   \HUST@setframerefoptions{#1}%
+  \ifHUST@framerefbottom
+    \global\beamer@framebottomskip=0pt\relax%
+    \global\beamer@framebottomskipautobreak=0pt\relax%
+  \fi
+  \begingroup%
+  \setlength{\HUST@referencewidth}{.95\paperwidth}%
   \ifHUST@framerefbottom\par\vfill\fi%
   \par\vspace{\HUST@framerefbeforeskip}%
-  \begin{HUSTReferenceBlock}[HUSTReferenceGray]%
-    \printbibliography[heading=none,segment=\therefsegment,check=HUSTFrameReferenceLimit]%
-  \end{HUSTReferenceBlock}%
+  \noindent\makebox[0pt][l]{%
+    \hspace*{-.0275\paperwidth}%
+    \begin{minipage}{\HUST@referencewidth}%
+      \begin{HUSTReferenceBlock}[HUSTReferenceGray]%
+        \printbibliography[heading=none,segment=\therefsegment,check=HUSTFrameReferenceLimit]%
+      \end{HUSTReferenceBlock}%
+    \end{minipage}%
+  }%
+  \par%
   \ifHUST@framerefbottom\par\vspace{\HUST@framerefafterskip}\fi%
   \endgroup%
 }
 
 \newcommand{\HUSTOverlayFrameReferences}[1][]{%
-  \setlength{\HUST@referencewidth}{\dimexpr\paperwidth-1.40in\relax}%
-  \begingroup%
-  \HUST@setframerefoptions{#1}%
-  \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=south,inner sep=0pt,text width=\HUST@referencewidth]
-      at ([yshift=.50in]current page.south) {%
-        \begin{minipage}{\HUST@referencewidth}%
-          \begin{HUSTReferenceBlock}[HUSTReferenceGray]%
-            \printbibliography[heading=none,segment=\therefsegment,check=HUSTFrameReferenceLimit]%
-          \end{HUSTReferenceBlock}%
-        \end{minipage}%
-      };
-  \end{tikzpicture}%
-  \endgroup%
+  \HUSTFrameReferences[#1]%
 }
 
 \newcommand{\HUSTReferencesFrame}[1][参考文献]{%
