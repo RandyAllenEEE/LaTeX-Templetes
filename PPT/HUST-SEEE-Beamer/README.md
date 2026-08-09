@@ -9,6 +9,7 @@
 - 自动根据 `\section{...}` 生成总目录，并在章节开始前插入当前章节高亮目录页。
 - 正文页自动使用当前章节名作为页眉标题，也支持逐页自定义 frame 标题。
 - 内置图、表、公式、代码、算法伪代码、语义重点块和参考文献展示环境，便于统一学术汇报排版。
+- 内置项目符号列表和编号列表：标记形状统一，颜色与字号默认继承所在正文或语义块，也可逐处覆盖。
 - 示例主文件提供双栏图文、并列子图和时间计划/甘特式进度页面，可直接复制后替换为实际内容。
 - 正文内容环境支持 `compact`、`dense` 与字号/行距/留白微调参数，便于处理长标题、4:3 页面和内容较多的页。
 - 使用 `biblatex` + `biber` 管理参考文献，普通 `\cite` 保持行内格式，上标引用使用 `\uppercite`。
@@ -283,6 +284,60 @@ Logo 路径应使用相对路径，不建议使用绝对路径。
 \end{HUSTContentFrame}
 \end{frame}
 ```
+
+### 项目符号与编号列表
+
+标准 `itemize` 和 `enumerate` 可直接使用，主题只统一标记形状，不固定正文颜色和字号：
+
+- `itemize` 依次使用实心圆、空心圆和方块表示三级层次；
+- `enumerate` 使用简洁的 `1.`、`2.`、`3.` 数字标记；
+- 字号继承所在的 `HUSTContentFrame`、局部 `\fontsize` 或语义块；
+- 颜色继承 Beamer 的 `local structure`。在 `HUSTKeyPointBlock`、`HUSTAlertBlock` 和 `HUSTConclusionBlock` 中会分别跟随青色、红色和绿色。
+
+```tex
+\begin{itemize}
+  \item 一级结论
+  \begin{itemize}
+    \item 二级说明
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+  \item 故障检测
+  \item 电流限制
+  \item 故障后恢复
+\end{enumerate}
+```
+
+需要统一控制列表间距时，推荐使用 `HUSTBulletList` 和 `HUSTNumberList`。它们同样默认继承颜色与字号：
+
+```tex
+\begin{HUSTBulletList}[compact]
+  \item 电流型限流
+  \item 电压型限流
+\end{HUSTBulletList}
+
+\begin{HUSTNumberList}[compact,start=2]
+  \item 第二阶段
+  \item 第三阶段
+\end{HUSTNumberList}
+```
+
+列表提供三种间距模式：`normal`、`compact` 和 `loose`；兼容别名 `large` 等同于 `loose`。也可局部设置缩进、间距、颜色和字号：
+
+```tex
+\begin{HUSTBulletList}[
+  leftmargin=1.4em,
+  itemsep=.02in,
+  color=HUSTAlertRed,
+  fontsize=17,
+  baselineskip=21
+]
+  \item 仅当前列表使用显式样式
+\end{HUSTBulletList}
+```
+
+一般不建议同时指定颜色和字号；只有当列表需要脱离所在页面或信息框的视觉层级时再显式覆盖。
 
 ### 图、表、公式、代码与算法样式
 
