@@ -52,7 +52,9 @@
 \definecolor{HUSTCodeKeyword}{RGB}{0,0,153}
 \definecolor{HUSTCodeComment}{RGB}{80,120,80}
 \definecolor{HUSTCodeString}{RGB}{153,51,51}
-\definecolor{HUSTKeyPointBackground}{RGB}{239,243,255}
+% 正文信息框使用次级钢青色，与页眉/页脚的主题蓝区分层级。
+\definecolor{HUSTKeyPointBlue}{RGB}{43,101,124}
+\definecolor{HUSTKeyPointBackground}{RGB}{239,247,249}
 \definecolor{HUSTAlertRed}{RGB}{184,68,55}
 \definecolor{HUSTAlertBackground}{RGB}{255,243,239}
 \definecolor{HUSTConclusionGreen}{RGB}{46,122,86}
@@ -182,9 +184,6 @@
 \setbeamerfont{normal text}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{30}\selectfont}
 \setbeamerfont{frametitle}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{36}{44}\selectfont,series=\bfseries}
 \setbeamerfont{footline}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{26}\selectfont}
-\setbeamerfont{itemize/enumerate body}{size=\fontsize{28}{39}\selectfont}
-\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{24}{34}\selectfont}
-\setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{22}{30}\selectfont}
 \setbeamerfont{caption name}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{27}\selectfont,series=\bfseries}
 \setbeamerfont{caption}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{27}\selectfont}
 \setbeamerfont{block title}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{24}{29}\selectfont,series=\bfseries}
@@ -201,8 +200,39 @@
 }
 
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{itemize items}[circle]
-\setbeamertemplate{enumerate items}[default]
+% 正文列表只规定标记形状；颜色继承 local structure，字号继承当前位置。
+\setbeamercolor{itemize item}{parent=local structure}
+\setbeamercolor{itemize subitem}{parent=local structure}
+\setbeamercolor{itemize subsubitem}{parent=local structure}
+\setbeamercolor{enumerate item}{parent=local structure}
+\setbeamercolor{enumerate subitem}{parent=local structure}
+\setbeamercolor{enumerate subsubitem}{parent=local structure}
+\newcommand{\HUST@bulletitem}{%
+  {\usebeamercolor[fg]{itemize item}%
+   \tikz[baseline=-.55ex]\fill[color=fg] (0,0) circle (.56ex);}%
+}
+\newcommand{\HUST@bulletsubitem}{%
+  {\usebeamercolor[fg]{itemize subitem}%
+   \tikz[baseline=-.55ex]\draw[color=fg,line width=.75pt] (0,0) circle (.50ex);}%
+}
+\newcommand{\HUST@bulletsubsubitem}{%
+  {\usebeamercolor[fg]{itemize subsubitem}%
+   \tikz[baseline=-.45ex]\fill[color=fg] (-.42ex,-.42ex) rectangle (.42ex,.42ex);}%
+}
+\newcommand{\HUST@numberitem}[1]{%
+  {\usebeamercolor[fg]{enumerate item}\color{fg}\bfseries #1.}%
+}
+\newcommand{\HUST@numbersubitem}[1]{%
+  {\usebeamercolor[fg]{enumerate subitem}\color{fg}\bfseries #1.}%
+}
+\setbeamertemplate{itemize item}{\HUST@bulletitem}
+\setbeamertemplate{itemize subitem}{\HUST@bulletsubitem}
+\setbeamertemplate{itemize subsubitem}{\HUST@bulletsubsubitem}
+\setbeamertemplate{enumerate item}{\HUST@numberitem{\insertenumlabel}}
+\setbeamertemplate{enumerate subitem}{\HUST@numbersubitem{\insertsubenumlabel}}
+\setbeamertemplate{enumerate subsubitem}{\HUST@numbersubitem{\insertsubsubenumlabel}}
+\setbeamercolor{description item}{parent=local structure}
+\setbeamerfont{description item}{family=\HUSTLatinFont\HUSTHeiFont,series=\bfseries}
 \setbeamertemplate{blocks}[rounded]
 \setbeamertemplate{caption}[numbered]
 \setbeamersize{text margin left=.0525\paperwidth,text margin right=.04125\paperwidth}
@@ -244,18 +274,27 @@
 \newcommand{\HUST@requirementdefaultbaselineskip}{39}
 \newcommand{\HUST@requirementdefaultleft}{.08625\paperwidth}
 \newcommand{\HUST@requirementdefaultright}{.0525\paperwidth}
-\newcommand{\HUST@requirementdefaulttop}{.08in}
+\newcommand{\HUST@requirementdefaulttop}{.05in}
 \newcommand{\HUST@requirementfontsize}{28}
 \newcommand{\HUST@requirementbaselineskip}{39}
 \newcommand{\HUST@requirementtopskip}{.08in}
 \newcommand{\HUST@contentdefaultfontsize}{22}
 \newcommand{\HUST@contentdefaultbaselineskip}{30}
-\newcommand{\HUST@contentdefaulttop}{-.08in}
-\newcommand{\HUST@contentdefaultbottom}{-.06in}
+\newcommand{\HUST@contentdefaulttop}{-.10in}
+\newcommand{\HUST@contentdefaultbottom}{-.08in}
 \newcommand{\HUST@contentfontsize}{22}
 \newcommand{\HUST@contentbaselineskip}{30}
 \newcommand{\HUST@contenttopskip}{-.08in}
 \newcommand{\HUST@contentbottomskip}{-.06in}
+\newcommand{\HUST@listfontsize}{22}
+\newcommand{\HUST@listbaselineskip}{30}
+\newcommand{\HUST@listitemsep}{.035in}
+\newcommand{\HUST@listtopsep}{.020in}
+\newcommand{\HUST@listleftmargin}{1.55em}
+\newcommand{\HUST@liststart}{1}
+\newcommand{\HUST@listcolor}{}
+\newif\ifHUST@listcustomfont
+\newif\ifHUST@listcustomcolor
 \newlength{\HUST@tocleftlen}
 \newlength{\HUST@tocrightlen}
 \newlength{\HUST@tocrowtoplen}
@@ -292,7 +331,8 @@
     \end{minipage}%
   }%
   \setlength{\HUST@frametitleheight}{\dimexpr\ht\HUST@frametitlebox+\dp\HUST@frametitlebox\relax}%
-  \setlength{\HUST@frametitlevskip}{.1933\paperheight}%
+  % 略微上移正文内容起点，在不侵入标题安全区的前提下增加可用高度。
+  \setlength{\HUST@frametitlevskip}{.1875\paperheight}%
   \ifdim\HUST@frametitlevskip<\dimexpr.035\paperheight+\HUST@frametitleheight+.060\paperheight\relax
     \setlength{\HUST@frametitlevskip}{\dimexpr.035\paperheight+\HUST@frametitleheight+.060\paperheight\relax}%
   \fi
@@ -439,46 +479,51 @@
 \newcommand{\HUSTDisableSectionOutline}{\HUSTSectionOutlinefalse}
 
 \newcommand{\HUST@tocmetrics}{%
+  % 目录使用扩展后的正文安全区：顶部 1.40/7.5，底部 6.48/7.5。
+  % 1--5 项保持舒适条高，并按实际项目数自动拉伸间距，使首尾边界一致；
+  % 超过 5 项时逐级压缩字号和条高，但仍使用相同的上下边界。
+  \def\HUST@toctop{1.40}%
+  \def\HUST@tocbottom{6.48}%
   \ifnum\beamer@sectionmax>10\relax
     \def\HUST@tocfontsize{22}\def\HUST@tocbaselineskip{27}%
     \def\HUST@tocnumfontsize{24}\def\HUST@tocnumbaselineskip{29}%
-    \def\HUST@toctop{1.22}%
-    \pgfmathsetmacro{\HUST@tocstep}{5.25/(\the\beamer@sectionmax-1)}%
-    \pgfmathsetmacro{\HUST@tocheight}{min(.42,\HUST@tocstep*.86)}%
+    \pgfmathsetmacro{\HUST@tocheight}{.40}%
   \else\ifnum\beamer@sectionmax>7\relax
     \def\HUST@tocfontsize{24}\def\HUST@tocbaselineskip{29}%
     \def\HUST@tocnumfontsize{27}\def\HUST@tocnumbaselineskip{32}%
-    \def\HUST@toctop{1.22}%
-    \pgfmathsetmacro{\HUST@tocstep}{5.25/(\the\beamer@sectionmax-1)}%
-    \pgfmathsetmacro{\HUST@tocheight}{min(.54,\HUST@tocstep*.86)}%
+    \pgfmathsetmacro{\HUST@tocheight}{.52}%
   \else\ifnum\beamer@sectionmax>5\relax
-    \def\HUST@tocfontsize{32}\def\HUST@tocbaselineskip{38}%
-    \def\HUST@tocnumfontsize{34}\def\HUST@tocnumbaselineskip{40}%
-    \def\HUST@toctop{1.20}%
-    \pgfmathsetmacro{\HUST@tocstep}{.82}%
-    \pgfmathsetmacro{\HUST@tocheight}{.72}%
+    \def\HUST@tocfontsize{27}\def\HUST@tocbaselineskip{33}%
+    \def\HUST@tocnumfontsize{30}\def\HUST@tocnumbaselineskip{36}%
+    \pgfmathsetmacro{\HUST@tocheight}{.68}%
   \else
-    \def\HUST@tocfontsize{40}\def\HUST@tocbaselineskip{46}%
-    \def\HUST@tocnumfontsize{40}\def\HUST@tocnumbaselineskip{46}%
-    \def\HUST@toctop{1.253}%
-    \pgfmathsetmacro{\HUST@tocstep}{1.17}%
-    \pgfmathsetmacro{\HUST@tocheight}{.978}%
+    \def\HUST@tocfontsize{30}\def\HUST@tocbaselineskip{36}%
+    \def\HUST@tocnumfontsize{32}\def\HUST@tocnumbaselineskip{38}%
+    \pgfmathsetmacro{\HUST@tocheight}{.82}%
   \fi\fi\fi
+  \ifnum\beamer@sectionmax>1\relax
+    \pgfmathsetmacro{\HUST@tocstep}{%
+      (\HUST@tocbottom-\HUST@toctop-\HUST@tocheight)/(\the\beamer@sectionmax-1)}%
+  \else
+    \pgfmathsetmacro{\HUST@toctop}{(1.40+6.48-\HUST@tocheight)/2}%
+    \pgfmathsetmacro{\HUST@tocstep}{0}%
+  \fi
 }
 
 \newcommand{\HUST@tocentry}[3]{%
   \HUST@tocmetrics%
-  \pgfmathsetlength{\HUST@tocleftlen}{.239925\paperwidth}%
-  \pgfmathsetlength{\HUST@tocrightlen}{.760575\paperwidth}%
+  % 加宽目录条，给长章节标题留出单行排版空间。
+  \pgfmathsetlength{\HUST@tocleftlen}{.120\paperwidth}%
+  \pgfmathsetlength{\HUST@tocrightlen}{.920\paperwidth}%
   \pgfmathsetlength{\HUST@tocrowtoplen}{(\HUST@toctop+(#2-1)*\HUST@tocstep)*\paperheight/7.5}%
   \pgfmathsetlength{\HUST@tocheightlen}{\HUST@tocheight*\paperheight/7.5}%
   \setlength{\HUST@tocbottomlen}{\dimexpr\HUST@tocrowtoplen+\HUST@tocheightlen\relax}%
   \setlength{\HUST@tocradiuslen}{\dimexpr\HUST@tocheightlen/2\relax}%
   \setlength{\HUST@toccenterxlen}{\dimexpr\HUST@tocleftlen+\HUST@tocradiuslen\relax}%
   \setlength{\HUST@toccenterylen}{\dimexpr-\HUST@tocrowtoplen-\HUST@tocradiuslen\relax}%
-  \pgfmathsetlength{\HUST@toctextxlen}{\HUST@tocleftlen+\HUST@tocheightlen+.02025\paperwidth}%
+  \pgfmathsetlength{\HUST@toctextxlen}{\HUST@tocleftlen+\HUST@tocheightlen+.016\paperwidth}%
   \pgfmathsetlength{\HUST@tocinnerradiuslen}{.726*\HUST@tocradiuslen}%
-  \setlength{\HUST@toctextwidthlen}{\dimexpr\HUST@tocrightlen-\HUST@toctextxlen-.018\paperwidth\relax}%
+  \setlength{\HUST@toctextwidthlen}{\dimexpr\HUST@tocrightlen-\HUST@toctextxlen-.015\paperwidth\relax}%
   \begin{tikzpicture}[remember picture,overlay]
     \begin{scope}[shift={(current page.north west)},opacity=#1]
       \shade[left color=HUSTAgendaLeft,right color=HUSTAgendaRight,rounded corners=\HUST@tocradiuslen]
@@ -544,6 +589,90 @@
   bottom/.store in=\HUST@contentbottomskip,
   compact/.style={fontsize=22,baselineskip=29,top=-.10in,bottom=-.08in},
   dense/.style={fontsize=22,baselineskip=27,top=-.12in,bottom=-.10in},
+}
+
+% 可选的统一列表环境。标准 itemize/enumerate 同样会使用上述主题标记；
+% 默认继承当前位置的字号和 local structure 颜色，只统一间距与缩进。
+\pgfkeys{%
+  /HUST list/.is family,
+  /HUST list,
+  fontsize/.code={%
+    \renewcommand{\HUST@listfontsize}{#1}%
+    \pgfmathsetmacro{\HUST@listbaselineskip}{#1*1.28}%
+    \HUST@listcustomfonttrue%
+  },
+  baselineskip/.code={%
+    \renewcommand{\HUST@listbaselineskip}{#1}%
+    \HUST@listcustomfonttrue%
+  },
+  color/.code={%
+    \renewcommand{\HUST@listcolor}{#1}%
+    \HUST@listcustomcolortrue%
+  },
+  itemsep/.store in=\HUST@listitemsep,
+  topsep/.store in=\HUST@listtopsep,
+  leftmargin/.store in=\HUST@listleftmargin,
+  start/.store in=\HUST@liststart,
+  normal/.style={itemsep=.035in,topsep=.020in,leftmargin=1.55em},
+  compact/.style={itemsep=.015in,topsep=.005in,leftmargin=1.42em},
+  loose/.style={itemsep=.065in,topsep=.035in,leftmargin=1.65em},
+  large/.style={loose},
+}
+
+\newcommand{\HUST@setlistoptions}[1]{%
+  \edef\HUST@listfontsize{\f@size}%
+  \edef\HUST@listbaselineskip{\strip@pt\baselineskip}%
+  \renewcommand{\HUST@listitemsep}{.035in}%
+  \renewcommand{\HUST@listtopsep}{.020in}%
+  \renewcommand{\HUST@listleftmargin}{1.55em}%
+  \renewcommand{\HUST@liststart}{1}%
+  \renewcommand{\HUST@listcolor}{}%
+  \HUST@listcustomfontfalse%
+  \HUST@listcustomcolorfalse%
+  \pgfkeys{/HUST list,normal,#1}%
+}
+
+\newenvironment{HUSTBulletList}[1][]{%
+  \begingroup%
+  \HUST@setlistoptions{#1}%
+  \ifHUST@listcustomfont
+    \setbeamerfont{itemize/enumerate body}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+    \setbeamerfont{itemize/enumerate subbody}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+    \setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+  \fi
+  \ifHUST@listcustomcolor
+    \setbeamercolor{local structure}{fg=\HUST@listcolor}%
+  \fi
+  \setlength{\leftmargini}{\HUST@listleftmargin}%
+  \begin{itemize}%
+    \setlength{\itemsep}{\HUST@listitemsep}%
+    \setlength{\topsep}{\HUST@listtopsep}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{itemize}%
+  \endgroup%
+}
+
+\newenvironment{HUSTNumberList}[1][]{%
+  \begingroup%
+  \HUST@setlistoptions{#1}%
+  \ifHUST@listcustomfont
+    \setbeamerfont{itemize/enumerate body}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+    \setbeamerfont{itemize/enumerate subbody}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+    \setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{\HUST@listfontsize}{\HUST@listbaselineskip}\selectfont}%
+  \fi
+  \ifHUST@listcustomcolor
+    \setbeamercolor{local structure}{fg=\HUST@listcolor}%
+  \fi
+  \setlength{\leftmargini}{\HUST@listleftmargin}%
+  \begin{enumerate}%
+    \setcounter{enumi}{\numexpr\HUST@liststart-1\relax}%
+    \setlength{\itemsep}{\HUST@listitemsep}%
+    \setlength{\topsep}{\HUST@listtopsep}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{enumerate}%
+  \endgroup%
 }
 
 \newcommand{\HUST@setrequirementoptions}[1]{%
@@ -641,16 +770,14 @@
 \newcommand{\HUST@semanticblocksetup}[2]{%
   \setbeamercolor{block title}{fg=white,bg=#1}%
   \setbeamercolor{block body}{fg=black,bg=#2}%
+  \setbeamercolor{local structure}{fg=#1}%
   \setbeamerfont{block title}{family=\HUSTLatinFont\HUSTHeiFont,size=\fontsize{24}{29}\selectfont,series=\bfseries}%
   \setbeamerfont{block body}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
-  \setbeamerfont{itemize/enumerate body}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
-  \setbeamerfont{itemize/enumerate subbody}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
-  \setbeamerfont{itemize/enumerate subsubbody}{family=\HUSTLatinFont\HUSTSerifFont,size=\fontsize{22}{29}\selectfont}%
 }
 
 \newenvironment{HUSTKeyPointBlock}[1]{%
   \par\begingroup%
-  \HUST@semanticblocksetup{HUSTBlue}{HUSTKeyPointBackground}%
+  \HUST@semanticblocksetup{HUSTKeyPointBlue}{HUSTKeyPointBackground}%
   \begin{block}{#1}%
 }{%
   \end{block}%
