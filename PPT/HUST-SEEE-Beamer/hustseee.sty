@@ -13,6 +13,7 @@
 \RequirePackage{xcolor}
 \RequirePackage{listings}
 \@ifpackageloaded{biblatex}{}{\RequirePackage[backend=biber,style=ieee,sorting=none,defernumbers=true]{biblatex}}
+\DeclareBibliographyAlias{standard}{report}
 \newcommand{\HUSTAddBibResource}[1]{\addbibresource{#1}}
 \let\HUSTInlineCite\cite
 \DeclareCiteCommand{\HUSTSuperscriptCite}[\mkbibsuperscript]
